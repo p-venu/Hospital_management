@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Daniel Mitchell - Gastroenterologist | NBKR Hospital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fbfcfd; /* White background */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* DNA Animation */
+        .dna-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .dna-bg::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.publicdomainpictures.net/pictures/300000/velka/dna-helix-1544039042r8S.jpg') repeat;
+            background-size: 30%;
+            opacity: 0.2;
+            animation: dnaMove 15s linear infinite;
+        }
+
+        @keyframes dnaMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 200% 200%; }
+        }
+
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #5b9ef6;
+            --dept-bg: #ebeff2da; /* Light blue for department boxes */
+            --head-bg: #a8c5e7; /* Softer blue for heads */
+            --team-bg: #87b4eb; /* Very light blue for sub-team */
+            --highlight-gold: #d4a017; /* Gold highlight for heads */
+            --tech-glow: #00ffff; /* Cyan glow for high-tech effect */
+            --border-green: #22c55e; /* Green for HOD */
+            --border-blue: #3b82f6; /* Blue for team */
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px var(--tech-glow); }
+            50% { box-shadow: 0 0 20px var(--tech-glow); }
+            100% { box-shadow: 0 0 5px var(--tech-glow); }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .doctor-card, .team-card, .bio-section, .stat-card {
+            border-width: 4px; /* Thicker edges */
+            border-radius: 20px;
+        }
+
+        .doctor-card {
+            border-color: var(--border-blue);
+        }
+
+        .team-card {
+            border-color: var(--border-blue);
+        }
+
+        .bio-section {
+            border-color: var(--secondary-blue);
+        }
+
+        .stat-card {
+            border-color: var(--highlight-gold);
+        }
+
+        .doctor-card:hover, .team-card:hover, .stat-card:hover {
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+            animation: glow 1.5s infinite;
+        }
+
+        #chatbot {
+            animation: pulse 2s infinite;
+        }
+
+        .team-img {
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Enhanced UI Elements */
+        .bio-section {
+            background: linear-gradient(135deg, var(--accent-blue), #eeeff0);
+            padding: 3rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, var(--head-bg), #d2e0e3);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transform: rotate(45deg);
+        }
+
+        .achievement-list li {
+            position: relative;
+            padding: 1rem 2rem;
+            margin-bottom: 1rem;
+            border: 4px solid var(--highlight-gold); /* Thicker edges */
+            border-radius: 12px;
+            background: linear-gradient(145deg, #ffffff, var(--team-bg));
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .achievement-list li:hover {
+            transform: translateY(-3px);
+        }
+
+        .achievement-list li::before {
+            content: '⚡';
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--tech-glow);
+            font-size: 1.2rem;
+        }
+
+        .team-section {
+            background: linear-gradient(135deg, #f3f4f6, var(--team-bg));
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border: 4px solid var(--border-blue); /* Thicker edges */
+        }
+
+        /* Centered Buttons in Two Rows */
+        .button-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dna-bg"></div>
+    <!-- Navigation -->
+    <nav class="bg-[var(--primary-blue)] text-white p-6 sticky top-0 z-50 shadow-2xl">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-4xl font-extrabold tracking-wide drop-shadow-md">NBKR Hospital</h1>
+            <ul class="flex space-x-12 text-xl font-semibold">
+                <li><a href="1index.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Home</a></li>
+                <li><a href="2about_hospital_doctors.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">About</a></li>
+                <li><a href="3our_services.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Services</a></li>
+                <li><a href="4appointments.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Appointment</a></li>
+                <li><a href="5contact_us.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Detailed Doctor Bio Section -->
+    <section class="py-24 bg-transparent">
+        <div class="container mx-auto px-6">
+            <div class="bio-section animate-fade-in" style="animation-delay: 0.6s;">
+                <div class="flex flex-col md:flex-row items-center gap-16">
+                    <div class="doctor-card w-full md:w-1/3 text-center p-8 bg-white/90 backdrop-blur-sm">
+                        <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team26.jpg.jpg" alt="Dr. Daniel Mitchell" class="w-80 h-80 rounded-full mx-auto mb-8 shadow-2xl team-img border-4 border-[var(--border-blue)]">
+                        <h3 class="text-4xl font-extrabold text-[var(--primary-blue)] mb-3 tracking-wide">Dr. Daniel Mitchell, MD</h3>
+                        <p class="text-2xl text-gray-700 font-medium mb-6 italic">Gastroenterologist | Inflammatory Bowel Disease Specialist</p>
+                    </div>
+                    <div class="w-full md:w-2/3 p-8 bg-white/90 backdrop-blur-sm rounded-3xl border-4 border-[var(--secondary-blue)] shadow-xl">
+                        <h4 class="text-4xl font-bold mb-8 text-[var(--secondary-blue)] tracking-tight">Professional Overview</h4>
+                        <p class="text-lg text-gray-800 leading-loose mb-8 font-light">
+                            Expert in inflammatory bowel disease, specializing in Crohn’s disease and ulcerative colitis management with advanced therapeutic techniques.
+                        </p>
+                        <div class="grid md:grid-cols-3 gap-8 mb-12">
+                            <div class="stat-card animate-fade-in" style="animation-delay: 0.8s;">
+                                <h5 class="text-5xl font-extrabold text-[var(--primary-blue)] mb-2">13+</h5>
+                                <p class="text-gray-700 text-lg">Years in Practice</p>
+                            </div>
+                            <div class="stat-card animate-fade-in" style="animation-delay: 1s;">
+                                <h5 class="text-5xl font-extrabold text-[var(--primary-blue)] mb-2">2,800+</h5>
+                                <p class="text-gray-700 text-lg">Patients Treated</p>
+                            </div>
+                            <div class="stat-card animate-fade-in" style="animation-delay: 1.2s;">
+                                <h5 class="text-5xl font-extrabold text-[var(--primary-blue)] mb-2">94%</h5>
+                                <p class="text-gray-700 text-lg">Patient Satisfaction</p>
+                            </div>
+                        </div>
+                        <h4 class="text-4xl font-bold mb-6 text-[var(--secondary-blue)] tracking-tight">Key Achievements</h4>
+                        <ul class="achievement-list text-lg text-gray-800 leading-loose font-light">
+                            <li>Managed care for 2,800+ patients with inflammatory bowel diseases.</li>
+                            <li>Developed AI-assisted treatment plans for Crohn’s disease.</li>
+                            <li>Published 14+ articles on inflammatory bowel disease therapies.</li>
+                            <li>Led IBD patient education programs for 1,700+ individuals.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Today's Appointments and Gastroenterology Buttons -->
+    <section class="py-12 bg-transparent text-center">
+        <div class="container mx-auto px-6">
+            <div class="button-section">
+                <button id="appointmentsBtn" class="bg-[var(--secondary-blue)] text-white px-16 py-5 rounded-full font-bold text-2xl hover:bg-[var(--primary-blue)] transition-colors shadow-2xl hover:shadow-[0_0_20px_var(--tech-glow)]">Check Today's Appointments</button>
+                <a href="gastroenterology.html" class="bg-[var(--secondary-blue)] text-white px-16 py-5 rounded-full font-bold text-2xl hover:bg-[var(--primary-blue)] transition-colors shadow-2xl hover:shadow-[0_0_20px_var(--tech-glow)]">Gastroenterology</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Redirect Button -->
+    <a id="chatbot" href="6bot.html" class="fixed bottom-8 right-8 bg-[var(--secondary-blue)] text-white p-6 rounded-full shadow-2xl hover:bg-[var(--primary-blue)] transition-transform transform hover:scale-110 hover:shadow-[0_0_30px_var(--tech-glow)] z-10">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5v-4a2 2 0 012-2h10a2 2 0 012 2v4h-4m-6 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+    </a>
+
+    <!-- Additional Functionality: Appointment Booking Teaser -->
+    <section class="py-20 bg-transparent text-center">
+        <div class="container mx-auto px-6">
+            <h3 class="text-4xl font-extrabold mb-8 text-[var(--primary-blue)] animate-fade-in tracking-wide drop-shadow-md">Schedule a Consultation with Dr. Mitchell</h3>
+            <p class="text-[var(--accent-blue)] text-xl mb-12 max-w-2xl mx-auto font-bold">Advanced gastroenterological care at your fingertips, powered by cutting-edge technology.</p>
+            <a href="4appointments.html" class="bg-[var(--secondary-blue)] text-white px-24 py-6 rounded-full font-bold text-3xl hover:bg-[var(--primary-blue)] transition-colors shadow-2xl hover:shadow-[0_0_30px_var(--tech-glow)]">Book Now</a>
+        </div>
+    </section>
+
+    <!-- Authentication Modal for Appointments Only -->
+    <div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div class="bg-white p-10 rounded-3xl shadow-2xl w-112 border-4 border-[var(--secondary-blue)] backdrop-blur-sm">
+            <h3 class="text-3xl font-bold mb-6 text-center text-[var(--primary-blue)] drop-shadow-md">Authorized Access Only</h3>
+            <input id="authName" type="text" placeholder="Name" class="w-full p-4 mb-6 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-[var(--secondary-blue)] text-lg">
+            <input id="authPassword" type="password" placeholder="Password" class="w-full p-4 mb-6 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-[var(--secondary-blue)] text-lg">
+            <button id="submitAuth" class="bg-green-500 text-white p-4 rounded-xl w-full hover:bg-green-600 text-xl font-bold shadow-md">Submit</button>
+            <button id="closeModal" class="mt-6 text-red-600 w-full text-center text-lg font-semibold">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[var(--primary-blue)] text-white py-12 text-center">
+        <p class="text-xl">&copy; 2025 NBKR Hospital. All rights reserved. | Pioneering High-Tech Healthcare</p>
+    </footer>
+
+    <script>
+        // Appointments button
+        document.getElementById('appointmentsBtn').addEventListener('click', () => {
+            document.getElementById('authModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('authModal').classList.add('hidden');
+        });
+
+        document.getElementById('submitAuth').addEventListener('click', () => {
+            const name = document.getElementById('authName').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+
+            if (name === 'a' && password === '0943') {
+                window.location.href = 'app_team_gastroenterology_daniel_mitchell.html';
+            } else {
+                alert('Access Denied: Invalid credentials for appointments');
+            }
+        });
+    </script>
+</body>
+</html>
