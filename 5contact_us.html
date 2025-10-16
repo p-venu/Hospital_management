@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBKR Hospital - Contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Added for Font Awesome icons -->
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .form-input {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .form-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        .contact-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .voice-btn {
+            background: linear-gradient(to right, #2563eb, #3b82f6);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 10px;
+            top: 34px;
+        }
+        .voice-btn:hover {
+            background: linear-gradient(to right, #1d4ed8, #2563eb);
+            transform: scale(1.1);
+        }
+        .input-container {
+            position: relative;
+            width: 100%;
+        }
+        .emergency-container {
+            position: relative;
+            width: 100%;
+            height: 430px; /* Increased height by 30px for 3cm gap */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #e0f2fe, #ffffff);
+        }
+        .emergency-info {
+            position: absolute;
+            background-color: #10b981; /* Green rectangles */
+            color: black;
+            padding: 15px; /* Increased padding for larger size */
+            border: 3px solid #34d399; /* Thicker border for larger size */
+            border-radius: 10px; /* Slightly larger radius */
+            font-size: 16px; /* Increased font size */
+            width: 200px; /* Adjusted width for grid */
+            height: 60px; /* Adjusted height for grid */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 5;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+        }
+        .emergency-btn {
+            background-color: #ef4444; /* Red color */
+            color: black; /* Black text */
+            padding: 20px;
+            border-radius: 50%; /* Round shape */
+            font-weight: bold;
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            z-index: 10;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .emergency-btn:hover {
+            background-color: #10b981; /* Green on hover */
+        }
+        @keyframes greenPulse {
+            0% { background-color: #10b981; }
+            100% { background-color: #ef4444; }
+        }
+        .emergency-btn.pressed {
+            animation: greenPulse 10s forwards;
+        }
+        .emergency-btn.pressed::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background-color: rgba(239, 68, 68, 0.7); /* Red release effect */
+            border-radius: 50%;
+            animation: releaseEffect 1s ease-out forwards;
+            z-index: -1;
+        }
+        @keyframes releaseEffect {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        .vertical-line {
+            position: absolute;
+            width: 2px;
+            background-color: #f59e0b; /* Yellow line */
+            z-index: 1;
+            left: calc(50% - 100px); /* Second column center */
+        }
+        .new-vertical-line {
+            position: absolute;
+            width: 2px;
+            background-color: #f59e0b; /* Yellow line */
+            z-index: 1;
+        }
+        .connection-line {
+            position: absolute;
+            width: 250px; /* Exact distance from point right edge to vertical line */
+            height: 2px;
+            background-color: #f59e0b; /* Yellow line */
+            z-index: 1;
+            transform-origin: left;
+        }
+        .arrow-line {
+            position: absolute;
+            height: 2px;
+            background-color: #f59e0b; /* Yellow line */
+            z-index: 1;
+        }
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #f59e0b; /* Arrowhead */
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-white font-sans">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4 sticky top-0 z-20 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold tracking-tight">NBKR Hospital</h1>
+            <ul class="flex space-x-8 text-lg">
+                <li><a href="1index.html" class="hover:text-blue-300 transition-colors">Home</a></li>
+                <li><a href="2about_hospital_doctors.html" class="hover:text-blue-300 transition-colors">About</a></li>
+                <li><a href="3our_services.html" class="hover:text-blue-300 transition-colors">Services</a></li>
+                <li><a href="4appointments.html" class="hover:text-blue-300 transition-colors">Appointment</a></li>
+                <li><a href="5contact_us.html" class="hover:text-blue-300 transition-colors">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contact Header -->
+    <section class="py-20 bg-gradient-to-r from-blue-600 to-blue-400 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-5xl font-bold mb-4 drop-shadow-lg animate-fade-in">Contact Us</h2>
+            <p class="text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in" style="animation-delay: 0.2s;">We're here to assist you. Reach out with your questions or concerns, and we'll respond promptly.</p>
+        </div>
+    </section>
+
+    <!-- Contact Content -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Contact Form -->
+                <div class="animate-fade-in" style="animation-delay: 0.3s;">
+                    <h3 class="text-2xl font-semibold mb-6 text-blue-800">Get in Touch</h3>
+                    <form id="contactForm" class="bg-blue-50 p-8 rounded-lg shadow-lg">
+                        <div class="mb-6 input-container">
+                            <label class="block text-blue-800 font-semibold mb-2">Name</label>
+                            <input type="text" required class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Enter your name" id="contactName">
+                            <button type="button" onclick="toggleVoiceInput('contactName')" class="voice-btn rounded"><i class="fas fa-microphone"></i></button>
+                        </div>
+                        <div class="mb-6 input-container">
+                            <label class="block text-blue-800 font-semibold mb-2">Email</label>
+                            <input type="email" required class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Enter your email" id="contactEmail">
+                            <button type="button" onclick="toggleVoiceInput('contactEmail')" class="voice-btn rounded"><i class="fas fa-microphone"></i></button>
+                        </div>
+                        <div class="mb-6 input-container">
+                            <label class="block text-blue-800 font-semibold mb-2">Message</label>
+                            <textarea required class="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none" rows="5" placeholder="Your message" id="contactMessage"></textarea>
+                            <button type="button" onclick="toggleVoiceInput('contactMessage')" class="voice-btn rounded"><i class="fas fa-microphone"></i></button>
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-full w-full font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105">Send Message</button>
+                    </form>
+                </div>
+                <!-- Emergency Contacts -->
+                <div class="animate-fade-in" style="animation-delay: 0.4s;">
+                    <h3 class="text-2xl font-semibold mb-6 text-blue-800">Emergency Contacts</h3>
+                    <div class="space-y-4">
+                        <div class="contact-card bg-blue-100 p-6 rounded-lg shadow-lg flex items-center">
+                            <svg class="w-8 h-8 text-blue-600 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                            <div>
+                                <p class="text-blue-800 font-semibold">Emergency Line</p>
+                                <p class="text-gray-600">+91 123-456-7890</p>
+                            </div>
+                        </div>
+                        <div class="contact-card bg-blue-100 p-6 rounded-lg shadow-lg flex items-center">
+                            <svg class="w-8 h-8 text-blue-600 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <div>
+                                <p class="text-blue-800 font-semibold">Helpline</p>
+                                <p class="text-gray-600">+91 987-654-3210</p>
+                            </div>
+                        </div>
+                        <div class="contact-card bg-blue-100 p-6 rounded-lg shadow-lg flex items-center">
+                            <svg class="w-8 h-8 text-blue-600 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <div>
+                                <p class="text-blue-800 font-semibold">Address</p>
+                                <p class="text-gray-600">123 Health St, Vidyanagar, AP, India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Points, Button, and Lines -->
+    <div class="emergency-container">
+        <div id="info1-1" class="emergency-info" style="top: 50px; left: calc(25% - 100px);">1. Signal reaches the hospital</div>
+        <div id="info2-1" class="emergency-info" style="top: 150px; left: calc(25% - 100px);">2. Your location could be traced</div>
+        <div id="info3-1" class="emergency-info" style="top: 250px; left: calc(25% - 100px);">3. Ambulance will reach you</div>
+        <div id="info4-1" class="emergency-info" style="top: 350px; left: calc(25% - 100px);">4. Patient will safely reach the hospital</div>
+        <div id="emergencyBtn" class="emergency-btn" style="top: 150px; left: calc(75% - 90px);">EMERGENCY</div>
+        <div class="vertical-line" style="top: 80px; bottom: 380px; left: calc(50% - 100px);"></div> <!-- Original vertical line -->
+        <div id="line1" class="connection-line" style="top: 80px; left: calc(25% + 100px); transform: translateX(0px);"></div> <!-- Connects point 1 to vertical line -->
+        <div id="line2" class="connection-line" style="top: 180px; left: calc(25% + 100px); transform: translateX(0px);"></div> <!-- Connects point 2 to vertical line -->
+        <div id="line3" class="connection-line" style="top: 280px; left: calc(25% + 100px); transform: translateX(0px);"></div> <!-- Connects point 3 to vertical line -->
+        <div id="line4" class="connection-line" style="top: 380px; left: calc(25% + 100px); transform: translateX(0px);"></div> <!-- Connects point 4 to vertical line -->
+        <div class="new-vertical-line" style="top: 80px; bottom: 380px; left: calc(50% - 100px);"></div> <!-- Vertical line connecting first to last row -->
+        <div id="arrow-line" class="arrow-line" style="top: 225px; left: calc(50% - 100px); width: 300px;"></div> <!-- Extended arrow to touch button -->
+    </div>
+
+    <!-- Chatbot Button -->
+    <a id="chatbot" href="6bot.html" class="fixed bottom-6 right-6 bg-blue-600 text-white p-6 rounded-full cursor-pointer shadow-xl hover:bg-blue-700 transition-transform transform hover:scale-110 z-30">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5v-4a2 2 0 012-2h10a2 2 0 012 2v4h-4m-6 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+    </a>
+
+    <script>
+        // Contact Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Your message has been sent. We will get back to you soon.');
+            this.reset();
+        });
+
+        // Voice Input
+        let recognition;
+        let currentField = null;
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript.trim().replace(/\./g, '');
+                if (currentField) {
+                    const input = document.getElementById(currentField);
+                    if (input) {
+                        if (currentField === 'contactEmail') {
+                            const emailName = transcript.replace(/\s/g, '').toLowerCase();
+                            input.value = emailName + '@gmail.com';
+                        } else {
+                            input.value = transcript;
+                        }
+                    }
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.log('Speech recognition error:', event.error);
+            };
+
+            recognition.onend = () => {
+                if (currentField) {
+                    const button = document.querySelector(`[onclick="toggleVoiceInput('${currentField}')"]`);
+                    if (button) {
+                        button.innerHTML = '<i class="fas fa-microphone"></i>';
+                    }
+                    currentField = null;
+                }
+            };
+        }
+
+        function toggleVoiceInput(fieldId) {
+            if (!recognition) {
+                alert('Voice input is not supported in this browser.');
+                return;
+            }
+
+            const input = document.getElementById(fieldId);
+            const button = input ? input.parentElement.querySelector('.voice-btn') : null;
+
+            if (!input || !button) return;
+
+            if (currentField === fieldId) {
+                recognition.stop();
+                button.innerHTML = '<i class="fas fa-microphone"></i>';
+                currentField = null;
+                return;
+            }
+
+            currentField = fieldId;
+            button.innerHTML = '<i class="fas fa-stop"></i>';
+            recognition.start();
+        }
+
+        // Emergency Button Hover Effect
+        const emergencyBtn = document.getElementById('emergencyBtn');
+        emergencyBtn.addEventListener('click', function () {
+            this.classList.add('pressed');
+            setTimeout(() => {
+                this.classList.remove('pressed');
+            }, 10000); // 10 seconds
+        });
+    </script>
+</body>
+</html>

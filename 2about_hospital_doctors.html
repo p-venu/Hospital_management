@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBKR Hospital - About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #dbeafe;
+            --dept-bg: #e0f2fe; /* Light blue for department boxes */
+            --head-bg: #bfdbfe; /* Softer blue for heads */
+            --team-bg: #eff6ff; /* Very light blue for sub-team */
+            --highlight-gold: #d4a017; /* Gold highlight for heads */
+            --border-green: #22c55e; /* Green for HOD */
+            --border-blue: #3b82f6; /* Blue for team */
+            --tech-glow: #00ffff; /* Cyan glow for high-tech effect */
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px var(--tech-glow); }
+            50% { box-shadow: 0 0 20px var(--tech-glow); }
+            100% { box-shadow: 0 0 5px var(--tech-glow); }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .team-card, .head-card, .department-section, .mission-vision-card {
+            transition: box-shadow 0.3s ease;
+            border-width: 6px; /* Thicker edges */
+            border-radius: 16px; /* Larger radius for rounded edges */
+        }
+
+        .head-card {
+            border-color: var(--border-green);
+        }
+
+        .team-card {
+            border-color: var(--border-blue);
+        }
+
+        .department-section {
+            border-color: var(--secondary-blue);
+        }
+
+        .mission-vision-card {
+            border-color: var(--accent-blue);
+        }
+
+        .team-card:hover, .head-card:hover, .department-section:hover, .mission-vision-card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            animation: glow 1.5s infinite;
+        }
+
+        #chatbot {
+            animation: pulse 2s infinite;
+        }
+
+        .team-img {
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .head-highlight {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .head-highlight::before,
+        .head-highlight::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--highlight-gold), transparent);
+            z-index: 0;
+        }
+
+        .head-highlight::before {
+            left: -20px;
+            transform: skewX(-15deg);
+        }
+
+        .head-highlight::after {
+            right: -20px;
+            transform: skewX(15deg);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-gray-100 font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="bg-[var(--primary-blue)] text-white p-5 sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold tracking-tight">NBKR Hospital</h1>
+            <ul class="flex space-x-10 text-lg font-medium">
+                <li><a href="1index.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Home</a></li>
+                <li><a href="2about_hospital_doctors.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">About</a></li>
+                <li><a href="3our_services.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Services</a></li>
+                <li><a href="4appointments.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Appointment</a></li>
+                <li><a href="5contact_us.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- About Us Header with Enhanced Hospital Image and Logo Space -->
+    <section class="py-24 relative" style="background-color: #0aa2ee;">
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <img src="https://github.com/p-venu/image_links/blob/fe94b01d2fa9af6cd5e3e6d1f4a3bc6b710cbab2/image.png?raw=true" alt="NBKR Hospital" class="absolute top-0 left-0 w-full h-full object-cover z-0">
+            <img src="https://github.com/p-venu/image_links/blob/fe94b01d2fa9af6cd5e3e6d1f4a3bc6b710cbab2/image.png?raw=true" alt="NBKR Hospital Logo" class="w-80 h-80 mx-auto mb-6 animate-fade-in relative z-10" style="top: -50px; position: relative;">
+            <div class="bg-gradient-to-r from-[var(--primary-blue)] to-[var(--secondary-blue)] p-6 rounded-xl inline-block w-full max-w-5xl" style="background-color: #1e40af;">
+                <h2 class="text-6xl font-extrabold mb-6 drop-shadow-xl animate-fade-in relative z-10 text-white">About NBKR Hospital</h2>
+                <p class="text-2xl max-w-3xl mx-auto drop-shadow-lg animate-fade-in relative z-10 text-white" style="animation-delay: 0.2s;">
+                    Pioneering healthcare with compassion, innovation, and excellence since 1980.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission, Vision, and History -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="mission-vision-card bg-[var(--accent-blue)] p-8 rounded-xl shadow-lg animate-fade-in w-full max-w-4xl mx-auto" style="animation-delay: 0.3s;">
+                    <h3 class="text-5xl font-extrabold mb-6 text-[var(--primary-blue)]">Our Mission & Vision</h3>
+                    <p class="text-3xl font-bold text-gray-800 leading-relaxed">
+                        Our mission is to deliver world-class healthcare with empathy and precision. We envision a future where every individual thrives through innovative medical solutions and compassionate care.
+                    </p>
+                </div>
+                <div class="mission-vision-card bg-[var(--accent-blue)] p-8 rounded-xl shadow-lg animate-fade-in w-full max-w-4xl mx-auto" style="animation-delay: 0.4s;">
+                    <h3 class="text-5xl font-extrabold mb-6 text-[var(--primary-blue)]">Our Legacy</h3>
+                    <p class="text-3xl font-bold text-gray-800 leading-relaxed">
+                        Established in 1980, NBKR Hospital has emerged as a beacon of medical excellence, globally recognized for its patient-centric approach and pioneering treatments.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Expert Team -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h3 class="text-5xl font-extrabold text-center mb-16 text-[var(--primary-blue)] animate-fade-in">Our Expert Team</h3>
+            <div class="space-y-16">
+                <!-- Department 1: Cardiology -->
+                <div class="department-section bg-[var(--dept-bg)] p-4 rounded-xl shadow-md w-full max-w-7xl mx-auto">
+                    <h4 class="text-4xl font-semibold text-center mb-12 text-[var(--secondary-blue)] animate-fade-in">Cardiology Department</h4>
+                    <div class="flex justify-center mb-12">
+                        <a href="head_cardiology_john_smith.html" class="head-card head-highlight bg-[var(--head-bg)] p-6 rounded-xl shadow-xl text-center w-96 animate-fade-in" style="animation-delay: 0.5s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/head1.jpg.jpg" alt="Dr. John Smith" class="w-48 h-48 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-green)]">
+                            <h5 class="text-3xl font-extrabold text-[var(--primary-blue)]">Dr. John Smith</h5>
+                            <p class="text-xl text-gray-600 font-medium">Head of Cardiology</p>
+                        </a>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <a href="team_cardiology_alice_johnson.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.6s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team1.jpg.jpg" alt="Dr. Alice Johnson" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Alice Johnson</h6>
+                            <p class="text-lg text-gray-600">Senior Cardiologist</p>
+                        </a>
+                        <a href="team_cardiology_robert_davis.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.7s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team2.jpg.jpg" alt="Dr. Robert Davis" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Robert Davis</h6>
+                            <p class="text-lg text-gray-600">Interventional Cardiologist</p>
+                        </a>
+                        <a href="team_cardiology_emma_wilson.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.8s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team3.jpg.jpg" alt="Dr. Emma Wilson" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Emma Wilson</h6>
+                            <p class="text-lg text-gray-600">Cardiac Electrophysiologist</p>
+                        </a>
+                        <a href="team_cardiology_james_taylor.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.9s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team4.jpg.jpg" alt="Dr. James Taylor" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. James Taylor</h6>
+                            <p class="text-lg text-gray-600">Pediatric Cardiologist</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Department 2: Pediatrics -->
+                <div class="department-section bg-[var(--dept-bg)] p-4 rounded-xl shadow-md w-full max-w-7xl mx-auto">
+                    <h4 class="text-4xl font-semibold text-center mb-12 text-[var(--secondary-blue)] animate-fade-in">Pediatrics Department</h4>
+                    <div class="flex justify-center mb-12">
+                        <a href="head_pediatrics_sarah_lee.html" class="head-card head-highlight bg-[var(--head-bg)] p-6 rounded-xl shadow-xl text-center w-96 animate-fade-in" style="animation-delay: 0.5s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/head2.jpg.jpg" alt="Dr. Sarah Lee" class="w-48 h-48 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-green)]">
+                            <h5 class="text-3xl font-extrabold text-[var(--primary-blue)]">Dr. Sarah Lee</h5>
+                            <p class="text-xl text-gray-600 font-medium">Head of Pediatrics</p>
+                        </a>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <a href="team_pediatrics_olivia_green.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.6s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team5.jpg.jpg" alt="Dr. Olivia Green" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Olivia Green</h6>
+                            <p class="text-lg text-gray-600">Neonatologist</p>
+                        </a>
+                        <a href="team_pediatrics_noah_harris.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.7s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team6.jpg.jpg" alt="Dr. Noah Harris" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Noah Harris</h6>
+                            <p class="text-lg text-gray-600">Pediatric Endocrinologist</p>
+                        </a>
+                        <a href="team_pediatrics_sophia_clark.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.8s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team7.jpg.jpg" alt="Dr. Sophia Clark" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Sophia Clark</h6>
+                            <p class="text-lg text-gray-600">Pediatric Neurologist</p>
+                        </a>
+                        <a href="team_pediatrics_liam_lewis.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.9s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team8.jpg.jpg" alt="Dr. Liam Lewis" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Liam Lewis</h6>
+                            <p class="text-lg text-gray-600">Pediatric Surgeon</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Department 3: Orthopedics -->
+                <div class="department-section bg-[var(--dept-bg)] p-4 rounded-xl shadow-md w-full max-w-7xl mx-auto">
+                    <h4 class="text-4xl font-semibold text-center mb-12 text-[var(--secondary-blue)] animate-fade-in">Orthopedics Department</h4>
+                    <div class="flex justify-center mb-12">
+                        <a href="head_orthopedics_anil_kumar.html" class="head-card head-highlight bg-[var(--head-bg)] p-6 rounded-xl shadow-xl text-center w-96 animate-fade-in" style="animation-delay: 0.5s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/head3.jpg.jpg" alt="Dr. Anil Kumar" class="w-48 h-48 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-green)]">
+                            <h5 class="text-3xl font-extrabold text-[var(--primary-blue)]">Dr. Anil Kumar</h5>
+                            <p class="text-xl text-gray-600 font-medium">Head of Orthopedics</p>
+                        </a>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <a href="team_orthopedics_isabella_walker.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.6s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team9.jpg.jpg" alt="Dr. Isabella Walker" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Isabella Walker</h6>
+                            <p class="text-lg text-gray-600">Spine Specialist</p>
+                        </a>
+                        <a href="team_orthopedics_mason_hall.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.7s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team10.jpg.jpg" alt="Dr. Mason Hall" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Mason Hall</h6>
+                            <p class="text-lg text-gray-600">Joint Replacement Surgeon</p>
+                        </a>
+                        <a href="team_orthopedics_ava_young.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.8s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team11.jpg.jpg" alt="Dr. Ava Young" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Ava Young</h6>
+                            <p class="text-lg text-gray-600">Sports Medicine Specialist</p>
+                        </a>
+                        <a href="team_orthopedics_ethan_king.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.9s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team12.jpg.jpg" alt="Dr. Ethan King" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Ethan King</h6>
+                            <p class="text-lg text-gray-600">Trauma Orthopedist</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Department 4: Neurology -->
+                <div class="department-section bg-[var(--dept-bg)] p-4 rounded-xl shadow-md w-full max-w-7xl mx-auto">
+                    <h4 class="text-4xl font-semibold text-center mb-12 text-[var(--secondary-blue)] animate-fade-in">Neurology Department</h4>
+                    <div class="flex justify-center mb-12">
+                        <a href="head_neurology_emily_chen.html" class="head-card head-highlight bg-[var(--head-bg)] p-6 rounded-xl shadow-xl text-center w-96 animate-fade-in" style="animation-delay: 0.5s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/head4.jpg.jpg" alt="Dr. Emily Chen" class="w-48 h-48 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-green)]">
+                            <h5 class="text-3xl font-extrabold text-[var(--primary-blue)]">Dr. Emily Chen</h5>
+                            <p class="text-xl text-gray-600 font-medium">Head of Neurology</p>
+                        </a>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <a href="team_neurology_logan_wright.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.6s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team13.jpg.jpg" alt="Dr. Logan Wright" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Logan Wright</h6>
+                            <p class="text-lg text-gray-600">Stroke Specialist</p>
+                        </a>
+                        <a href="team_neurology_mia_scott.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.7s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team14.jpg.jpg" alt="Dr. Mia Scott" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Mia Scott</h6>
+                            <p class="text-lg text-gray-600">Epilepsy Expert</p>
+                        </a>
+                        <a href="team_neurology_lucas_adams.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.8s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team15.jpg.jpg" alt="Dr. Lucas Adams" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Lucas Adams</h6>
+                            <p class="text-lg text-gray-600">Neuroimmunologist</p>
+                        </a>
+                        <a href="team_neurology_harper_roberts.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.9s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team16.jpg.jpg" alt="Dr. Harper Roberts" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Harper Roberts</h6>
+                            <p class="text-lg text-gray-600">Movement Disorders Specialist</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Department 5: Oncology -->
+                <div class="department-section bg-[var(--dept-bg)] p-4 rounded-xl shadow-md w-full max-w-7xl mx-auto">
+                    <h4 class="text-4xl font-semibold text-center mb-12 text-[var(--secondary-blue)] animate-fade-in">Oncology Department</h4>
+                    <div class="flex justify-center mb-12">
+                        <a href="head_oncology_michael_brown.html" class="head-card head-highlight bg-[var(--head-bg)] p-6 rounded-xl shadow-xl text-center w-96 animate-fade-in" style="animation-delay: 0.5s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/head5.jpg.jpg" alt="Dr. Michael Brown" class="w-48 h-48 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-green)]">
+                            <h5 class="text-3xl font-extrabold text-[var(--primary-blue)]">Dr. Michael Brown</h5>
+                            <p class="text-xl text-gray-600 font-medium">Head of Oncology</p>
+                        </a>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <a href="team_oncology_evelyn_thompson.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.6s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team17.jpg.jpg" alt="Dr. Evelyn Thompson" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Evelyn Thompson</h6>
+                            <p class="text-lg text-gray-600">Medical Oncologist</p>
+                        </a>
+                        <a href="team_oncology_benjamin_lee.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.7s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team18.jpg.jpg" alt="Dr. Benjamin Lee" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Benjamin Lee</h6>
+                            <p class="text-lg text-gray-600">Radiation Oncologist</p>
+                        </a>
+                        <a href="team_oncology_grace_evans.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.8s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team19.jpg.jpg" alt="Dr. Grace Evans" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Grace Evans</h6>
+                            <p class="text-lg text-gray-600">Surgical Oncologist</p>
+                        </a>
+                        <a href="team_oncology_alexander_turner.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.9s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team20.jpg.jpg" alt="Dr. Alexander Turner" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Alexander Turner</h6>
+                            <p class="text-lg text-gray-600">Palliative Care Specialist</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Department 6: Gynecology -->
+                <div class="department-section bg-[var(--dept-bg)] p-4 rounded-xl shadow-md w-full max-w-7xl mx-auto">
+                    <h4 class="text-4xl font-semibold text-center mb-12 text-[var(--secondary-blue)] animate-fade-in">Gynecology Department</h4>
+                    <div class="flex justify-center mb-12">
+                        <a href="head_gynecology_priya_sharma.html" class="head-card head-highlight bg-[var(--head-bg)] p-6 rounded-xl shadow-xl text-center w-96 animate-fade-in" style="animation-delay: 0.5s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/head6.jpg.jpg" alt="Dr. Priya Sharma" class="w-48 h-48 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-green)]">
+                            <h5 class="text-3xl font-extrabold text-[var(--primary-blue)]">Dr. Priya Sharma</h5>
+                            <p class="text-xl text-gray-600 font-medium">Head of Gynecology</p>
+                        </a>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <a href="team_gynecology_zoe_mitchell.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.6s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team21.jpg.jpg" alt="Dr. Zoe Mitchell" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Zoe Mitchell</h6>
+                            <p class="text-lg text-gray-600">Obstetrician</p>
+                        </a>
+                        <a href="team_gynecology_william_carter.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.7s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team22.jpg.jpg" alt="Dr. William Carter" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. William Carter</h6>
+                            <p class="text-lg text-gray-600">Reproductive Endocrinologist</p>
+                        </a>
+                        <a href="team_gynecology_amelia_hill.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.8s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team23.jpg.jpg" alt="Dr. Amelia Hill" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Amelia Hill</h6>
+                            <p class="text-lg text-gray-600">Gynecologic Oncologist</p>
+                        </a>
+                        <a href="team_gynecology_jacob_baker.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.9s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team24.jpg.jpg" alt="Dr. Jacob Baker" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Jacob Baker</h6>
+                            <p class="text-lg text-gray-600">Urogynecologist</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Department 7: Gastroenterology -->
+                <div class="department-section bg-[var(--dept-bg)] p-4 rounded-xl shadow-md w-full max-w-7xl mx-auto">
+                    <h4 class="text-4xl font-semibold text-center mb-12 text-[var(--secondary-blue)] animate-fade-in">Gastroenterology Department</h4>
+                    <div class="flex justify-center mb-12">
+                        <a href="head_gastroenterology_david_patel.html" class="head-card head-highlight bg-[var(--head-bg)] p-6 rounded-xl shadow-xl text-center w-96 animate-fade-in" style="animation-delay: 0.5s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/head7.jpg.jpg" alt="Dr. David Patel" class="w-48 h-48 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-green)]">
+                            <h5 class="text-3xl font-extrabold text-[var(--primary-blue)]">Dr. David Patel</h5>
+                            <p class="text-xl text-gray-600 font-medium">Head of Gastroenterology</p>
+                        </a>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <a href="team_gastroenterology_scarlett_nelson.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.6s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team25.jpg.jpg" alt="Dr. Scarlett Nelson" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Scarlett Nelson</h6>
+                            <p class="text-lg text-gray-600">Hepatologist</p>
+                        </a>
+                        <a href="team_gastroenterology_daniel_mitchell.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.7s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team26.jpg.jpg" alt="Dr. Daniel Mitchell" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Daniel Mitchell</h6>
+                            <p class="text-lg text-gray-600">Endoscopist</p>
+                        </a>
+                        <a href="team_gastroenterology_victoria_perez.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.8s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team27.jpg.jpg" alt="Dr. Victoria Perez" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Victoria Perez</h6>
+                            <p class="text-lg text-gray-600">Gastrointestinal Surgeon</p>
+                        </a>
+                        <a href="team_gastroenterology_christopher_gonzalez.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.9s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team28.jpg.jpg" alt="Dr. Christopher Gonzalez" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Christopher Gonzalez</h6>
+                            <p class="text-lg text-gray-600">Inflammatory Bowel Disease Specialist</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Department 8: Dermatology -->
+                <div class="department-section bg-[var(--dept-bg)] p-4 rounded-xl shadow-md w-full max-w-7xl mx-auto">
+                    <h4 class="text-4xl font-semibold text-center mb-12 text-[var(--secondary-blue)] animate-fade-in">Dermatology Department</h4>
+                    <div class="flex justify-center mb-12">
+                        <a href="head_dermatology_lisa_wong.html" class="head-card head-highlight bg-[var(--head-bg)] p-6 rounded-xl shadow-xl text-center w-96 animate-fade-in" style="animation-delay: 0.5s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/head8.jpg.jpg" alt="Dr. Lisa Wong" class="w-48 h-48 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-green)]">
+                            <h5 class="text-3xl font-extrabold text-[var(--primary-blue)]">Dr. Lisa Wong</h5>
+                            <p class="text-xl text-gray-600 font-medium">Head of Dermatology</p>
+                        </a>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <a href="team_dermatology_natalie_rivera.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.6s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team29.jpg.jpg" alt="Dr. Natalie Rivera" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Natalie Rivera</h6>
+                            <p class="text-lg text-gray-600">Cosmetic Dermatologist</p>
+                        </a>
+                        <a href="team_dermatology_anthony_flores.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.7s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team30.jpg.jpg" alt="Dr. Anthony Flores" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Anthony Flores</h6>
+                            <p class="text-lg text-gray-600">Pediatric Dermatologist</p>
+                        </a>
+                        <a href="team_dermatology_samantha_collins.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.8s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team31.jpg.jpg" alt="Dr. Samantha Collins" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Samantha Collins</h6>
+                            <p class="text-lg text-gray-600">Dermatopathologist</p>
+                        </a>
+                        <a href="team_dermatology_matthew_stewart.html" class="team-card bg-[var(--team-bg)] p-4 rounded-xl shadow-lg text-center animate-fade-in w-full max-w-md mx-auto" style="animation-delay: 0.9s;">
+                            <img src="https://raw.githubusercontent.com/p-venu/image_links/9b5ebd4d31a8aee83d700573143b2fa94981e58e/team32.jpg.jpg" alt="Dr. Matthew Stewart" class="w-40 h-40 rounded-full mx-auto mb-4 team-img border-6 border-[var(--border-blue)]">
+                            <h6 class="text-2xl font-extrabold text-[var(--primary-blue)]">Dr. Matthew Stewart</h6>
+                            <p class="text-lg text-gray-600">Laser and Aesthetic Specialist</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Redirect Button -->
+    <a id="chatbot" href="6bot.html" class="fixed bottom-8 right-8 bg-[var(--secondary-blue)] text-white p-6 rounded-full shadow-2xl hover:bg-[var(--primary-blue)] transition-transform transform hover:scale-110 hover:shadow-[0_0_20px_var(--tech-glow)] z-10 flex items-center justify-center">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5v-4a2 2 0 012-2h10a2 2 0 012 2v4h-4m-6 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+    </a>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-112 border-4 border-[var(--secondary-blue)]">
+            <h3 class="text-3xl font-extrabold mb-6 text-center text-[var(--primary-blue)]">Access Only for Head of the Department</h3>
+            <input id="authName" type="text" placeholder="Name" class="w-full p-4 mb-6 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-[var(--secondary-blue)] text-lg">
+            <input id="authPassword" type="password" placeholder="Password" class="w-full p-4 mb-6 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-[var(--secondary-blue)] text-lg">
+            <button id="submitAuth" class="bg-green-500 text-white p-4 rounded-xl w-full hover:bg-green-600 text-xl font-bold">Submit</button>
+            <button id="closeModal" class="mt-6 text-red-500 w-full text-center text-lg font-semibold">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Doctor card clicks
+        let targetUrl = '';
+
+        document.querySelectorAll('.head-card').forEach(card => {
+            card.addEventListener('click', () => {
+                window.location.href = card.getAttribute('href');
+            });
+        });
+
+        document.querySelectorAll('.team-card').forEach(card => {
+            card.addEventListener('click', () => {
+                window.location.href = card.getAttribute('href');
+            });
+        });
+    </script>
+</body>
+</html>

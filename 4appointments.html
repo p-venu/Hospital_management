@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBKR Hospital - Appointment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+        }
+        .form-input, .form-select {
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        .progress-heart {
+            transition: transform 0.5s ease;
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .calendar-day {
+            transition: background-color 0.3s ease;
+        }
+        .calendar-day.available {
+            background-color: #22c55e;
+        }
+        .calendar-day.low-availability {
+            background-color: #ef4444;
+        }
+        .high-contrast .bg-blue-600 {
+            background-color: #1e40af !important;
+        }
+        .high-contrast .text-blue-800 {
+            color: #1e3a8a !important;
+        }
+        .voice-btn {
+            background: linear-gradient(to right, #2563eb, #3b82f6);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 10px;
+            top: 34px;
+        }
+        .voice-btn:hover {
+            background: linear-gradient(to right, #1d4ed8, #2563eb);
+            transform: scale(1.1);
+        }
+        .input-container {
+            position: relative;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-white font-sans" id="mainBody">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4 sticky top-0 z-20 shadow-lg" role="navigation" aria-label="Main navigation">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold tracking-tight">NBKR Hospital</h1>
+            <div class="flex items-center space-x-4">
+                <ul class="flex space-x-8 text-lg">
+                    <li><a href="1index.html" class="hover:text-blue-300 transition-colors">Home</a></li>
+                    <li><a href="2about_hospital_doctors.html" class="hover:text-blue-300 transition-colors">About</a></li>
+                    <li><a href="3our_services.html" class="hover:text-blue-300 transition-colors">Services</a></li>
+                    <li><a href="4appointments.html" class="hover:text-blue-300 transition-colors" aria-current="page">Appointment</a></li>
+                    <li><a href="5contact_us.html" class="hover:text-blue-300 transition-colors">Contact</a></li>
+                </ul>
+                <select id="languageToggle" class="bg-blue-700 text-white p-2 rounded-lg" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="te">Telugu</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Appointment Header -->
+    <section class="parallax py-20 text-white" style="background-image: url('https://images.unsplash.com/photo-1584982751601-97dcc096659c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');" role="banner" aria-label="Book Your Appointment">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative container mx-auto px-4 text-center animate-fade-in">
+            <h2 class="text-5xl md:text-6xl font-bold mb-4 drop-shadow-lg" data-i18n="book_appointment">Book Your Appointment</h2>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto drop-shadow-md" style="animation-delay: 0.2s;" data-i18n="book_description">Schedule your visit with our innovative, voice-enabled booking system.</p>
+        </div>
+    </section>
+
+    <!-- Appointment Form -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-lg mx-auto bg-blue-50 p-8 rounded-lg shadow-lg animate-fade-in" style="animation-delay: 0.3s;">
+                <!-- Progress Tracker -->
+                <div class="mb-6 relative">
+                    <div class="bg-gray-200 h-2 rounded-full">
+                        <div id="progressBar" class="bg-blue-600 h-2 rounded-full"></div>
+                    </div>
+                    <svg id="progressHeart" class="progress-heart w-6 h-6 text-red-600 absolute top-[-10px]" style="left: 0;" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                    <div class="flex justify-between text-sm text-gray-600 mt-2">
+                        <span data-i18n="step_personal">Personal Info</span>
+                        <span data-i18n="step_details">Appointment Details</span>
+                        <span data-i18n="step_confirm">Confirm</span>
+                    </div>
+                </div>
+                <!-- Multi-Step Form -->
+                <form id="appointmentForm">
+                    <!-- Step 1: Personal Info -->
+                    <div class="step active" data-step="1">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-800" data-i18n="personal_info">Personal Information</h3>
+                        <div class="mb-6 input-container">
+                            <label class="block text-blue-800 font-semibold mb-2" data-i18n="patient_name">Patient Name</label>
+                            <input type="text" required class="form-input p-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Enter your full name" name="name" id="patientName">
+                            <button type="button" onclick="toggleVoiceInput('patientName')" class="voice-btn rounded"><i class="fas fa-microphone"></i></button>
+                        </div>
+                        <div class="mb-6 input-container">
+                            <label class="block text-blue-800 font-semibold mb-2" data-i18n="contact_number">Contact Number</label>
+                            <input type="tel" required pattern="\d{10}" maxlength="10" class="form-input p-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Enter your phone number" name="phone" id="contactNumber">
+                            <button type="button" onclick="toggleVoiceInput('contactNumber')" class="voice-btn rounded"><i class="fas fa-microphone"></i></button>
+                        </div>
+                        <div class="mb-6 input-container">
+                            <label class="block text-blue-800 font-semibold mb-2" data-i18n="email">Email</label>
+                            <input type="email" required class="form-input p-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Enter your email address" name="email" id="patientEmail">
+                            <button type="button" onclick="toggleVoiceInput('patientEmail')" class="voice-btn rounded"><i class="fas fa-microphone"></i></button>
+                        </div>
+                        <button type="button" class="next-btn bg-blue-600 text-white px-8 py-3 rounded-full w-full font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105" aria-label="Next step" data-i18n="next">Next</button>
+                    </div>
+                    <!-- Step 2: Appointment Details -->
+                    <div class="step" data-step="2">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-800" data-i18n="appointment_details">Appointment Details</h3>
+                        <div class="mb-6">
+                            <label class="block text-blue-800 font-semibold mb-2" data-i18n="department">Department</label>
+                            <select required class="form-select p-3 border border-gray-300 rounded-lg focus:outline-none" name="department" id="departmentSelect">
+                                <option value="" data-i18n="select_department">Select Department</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="pediatrics">Pediatrics</option>
+                                <option value="orthopedics">Orthopedics</option>
+                                <option value="neurology">Neurology</option>
+                                <option value="oncology">Oncology</option>
+                                <option value="gynecology">Gynecology</option>
+                                <option value="gastroenterology">Gastroenterology</option>
+                                <option value="dermatology">Dermatology</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-blue-800 font-semibold mb-2" data-i18n="doctor_preference">Doctor Preference (Optional)</label>
+                            <select class="form-select p-3 border border-gray-300 rounded-lg focus:outline-none" name="doctor" id="doctorSelect">
+                                <option value="" data-i18n="select_doctor">Select Doctor (Optional)</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-blue-800 font-semibold mb-2" data-i18n="date">Date</label>
+                            <div class="flex space-x-4">
+                                <select required class="form-select p-3 border border-gray-300 rounded-lg focus:outline-none" name="day" id="daySelect">
+                                    <option value="">Day</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                </select>
+                                <select required class="form-select p-3 border border-gray-300 rounded-lg focus:outline-none" name="month" id="monthSelect">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                                <select required class="form-select p-3 border border-gray-300 rounded-lg focus:outline-none" name="year" id="yearSelect">
+                                    <option value="">Year</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                    <option value="2031">2031</option>
+                                    <option value="2032">2032</option>
+                                    <option value="2033">2033</option>
+                                    <option value="2034">2034</option>
+                                    <option value="2035">2035</option>
+                                </select>
+                            </div>
+                            <input type="hidden" required name="date" id="dateInput">
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-blue-800 font-semibold mb-2" data-i18n="time_preference">Preferred Time of Day</label>
+                            <select required class="form-select p-3 border border-gray-300 rounded-lg focus:outline-none" name="timePreference" id="timePreference">
+                                <option value="" data-i18n="select_time_preference">Select Preferred Time</option>
+                                <option value="morning" data-i18n="morning">Morning (8 AM - 12 PM)</option>
+                                <option value="afternoon" data-i18n="afternoon">Afternoon (12 PM - 5 PM)</option>
+                            </select>
+                        </div>
+                        <div class="flex justify-between">
+                            <button type="button" class="prev-btn bg-gray-400 text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-500 transition-transform transform hover:scale-105" aria-label="Previous step" data-i18n="previous">Previous</button>
+                            <button type="button" class="next-btn bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105" aria-label="Next step" data-i18n="next">Next</button>
+                        </div>
+                    </div>
+                    <!-- Step 3: Confirmation -->
+                    <div class="step" data-step="3">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-800" data-i18n="confirm_appointment">Confirm Your Appointment</h3>
+                        <p class="text-gray-600 mb-6" data-i18n="review_details">Please review your details before submitting.</p>
+                        <div id="confirmationDetails" class="bg-white p-4 rounded-lg shadow-inner mb-6"></div>
+                        <div class="flex justify-between">
+                            <button type="button" class="prev-btn bg-gray-400 text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-500 transition-transform transform hover:scale-105" aria-label="Previous step" data-i18n="previous">Previous</button>
+                            <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105" aria-label="Submit appointment" data-i18n="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Assistance Button -->
+                <a href="---------------------this is link ------------------------------------------" class="mt-4 w-full block bg-green-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition-transform transform hover:scale-105 text-center" aria-label="Assistance" data-i18n="assistance">Assistance</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Modal with Dashboard Preview -->
+    <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-40" role="dialog" aria-label="Appointment confirmation">
+        <div class="bg-white p-8 rounded-lg max-w-md w-full relative">
+            <button id="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800" aria-label="Close modal">×</button>
+            <h4 class="text-xl font-bold text-blue-800 mb-4" data-i18n="appointment_confirmed">Appointment Confirmed</h4>
+            <p id="modalDetails" class="text-gray-600 mb-4"></p>
+            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                <h5 class="text-lg font-semibold text-blue-800" data-i18n="dashboard_preview">Your Dashboard Preview</h5>
+                <p class="text-gray-600" data-i18n="dashboard_info">Access your appointment details, set reminders, and more.</p>
+                <button id="downloadCalendar" class="mt-2 bg-green-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-green-700" aria-label="Download calendar event" data-i18n="download_calendar">Download Calendar Event</button>
+            </div>
+            <button id="rescheduleBtn" class="bg-yellow-600 text-white px-8 py-3 rounded-full w-full font-semibold hover:bg-yellow-700 transition-transform transform hover:scale-105 mb-2" aria-label="Reschedule appointment" data-i18n="reschedule">Reschedule</button>
+            <button id="modalCloseBtn" class="bg-blue-600 text-white px-8 py-3 rounded-full w-full font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105" aria-label="Close confirmation" data-i18n="close">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Translation Dictionary
+        const translations = {
+            en: {
+                book_appointment: "Book Your Appointment",
+                book_description: "Schedule your visit with our innovative, voice-enabled booking system.",
+                step_personal: "Personal Info",
+                step_details: "Appointment Details",
+                step_confirm: "Confirm",
+                personal_info: "Personal Information",
+                patient_name: "Patient Name",
+                contact_number: "Contact Number",
+                email: "Email",
+                appointment_details: "Appointment Details",
+                department: "Department",
+                select_department: "Select Department",
+                doctor_preference: "Doctor Preference (Optional)",
+                select_doctor: "Select Doctor (Optional)",
+                date: "Date",
+                open_calendar: "Open Interactive Calendar",
+                time_preference: "Preferred Time of Day",
+                select_time_preference: "Select Preferred Time",
+                morning: "Morning (8 AM - 12 PM)",
+                afternoon: "Afternoon (12 PM - 5 PM)",
+                confirm_appointment: "Confirm Your Appointment",
+                review_details: "Please review your details before submitting.",
+                next: "Next",
+                previous: "Previous",
+                submit: "Submit",
+                appointment_confirmed: "Appointment Confirmed",
+                dashboard_preview: "Your Dashboard Preview",
+                dashboard_info: "Access your appointment details, set reminders, and more.",
+                download_calendar: "Download Calendar Event",
+                reschedule: "Reschedule",
+                close: "Close",
+                assistance: "Assistance"
+            },
+            hi: {
+                book_appointment: "अपनी नियुक्ति बुक करें",
+                book_description: "हमारे नवीन, आवाज-सक्षम बुकिंग सिस्टम के साथ अपनी यात्रा शेड्यूल करें।",
+                step_personal: "व्यक्तिगत जानकारी",
+                step_details: "नियुक्ति विवरण",
+                step_confirm: "पुष्टि करें",
+                personal_info: "व्यक्तिगत जानकारी",
+                patient_name: "रोगी का नाम",
+                contact_number: "संपर्क नंबर",
+                email: "ईमेल",
+                appointment_details: "नियुक्ति विवरण",
+                department: "विभाग",
+                select_department: "विभाग चुनें",
+                doctor_preference: "डॉक्टर प्राथमिकता (वैकल्पिक)",
+                select_doctor: "डॉक्टर चुनें (वैकल्पिक)",
+                date: "तारीख",
+                open_calendar: "इंटरैक्टिव कैलेंडर खोलें",
+                time_preference: "दिन का पसंदीदा समय",
+                select_time_preference: "पसंदीदा समय चुनें",
+                morning: "सुबह (8 बजे - 12 बजे)",
+                afternoon: "दोपहर (12 बजे - 5 बजे)",
+                confirm_appointment: "अपनी नियुक्ति की पुष्टि करें",
+                review_details: "कृपया सबमिट करने से पहले अपने विवरण की समीक्षा करें।",
+                next: "अगला",
+                previous: "पिछला",
+                submit: "जमा करें",
+                appointment_confirmed: "नियुक्ति की पुष्टि",
+                dashboard_preview: "आपका डैशबोर्ड पूर्वावलोकन",
+                dashboard_info: "अपने नियुक्ति विवरण, रिमाइंडर और अधिक तक पहुंचें।",
+                download_calendar: "कैलेंडर इवेंट डाउनलोड करें",
+                reschedule: "पुनर्निर्धारण",
+                close: "बंद करें",
+                assistance: "सहायता"
+            },
+            te: {
+                book_appointment: "మీ అపాయింట్‌మెంట్ బుక్ చేయండి",
+                book_description: "మా ఆవిష్కరణాత్మక, వాయిస్-సామర్థ్య బుకింగ్ సిస్టమ్‌తో మీ సందర్శనను షెడ్యూల్ చేయండి.",
+                step_personal: "వ్యక్తిగత సమాచారం",
+                step_details: "అపాయింట్‌మెంట్ వివరాలు",
+                step_confirm: "నిర్ధారించండి",
+                personal_info: "వ్యక్తిగత సమాచారం",
+                patient_name: "రోగి పేరు",
+                contact_number: "సంప్రదింపు నంబర్",
+                email: "ఇమెయిల్",
+                appointment_details: "అపాయింట్‌మెంట్ వివరాలు",
+                department: "విభాగం",
+                select_department: "విభాగాన్ని ఎంచుకోండి",
+                doctor_preference: "డాక్టర్ ప్రాధాన్యత (ఐచ్ఛికం)",
+                select_doctor: "డాక్టర్‌ను ఎంచుకోండి (ఐచ్ఛికం)",
+                date: "తేదీ",
+                open_calendar: "ఇంటరాక్టివ్ క్యాలెండర్‌ను తెరవండి",
+                time_preference: "రోజు యొక్క ప్రాధాన్య సమయం",
+                select_time_preference: "ప్రాధాన్య సమయాన్ని ఎంచుకోండి",
+                morning: "ఉదయం (8 గం - 12 గం)",
+                afternoon: "మధ్యాహ్నం (12 గం - 5 గం)",
+                confirm_appointment: "మీ అపాయింట్‌మెంట్‌ను నిర్ధారించండి",
+                review_details: "సమర్పించే ముందు దయచేసి మీ వివరాలను సమీక్షించండి.",
+                next: "తదుపరి",
+                previous: "మునుపటి",
+                submit: "సమర్పించండి",
+                appointment_confirmed: "అపాయింట్‌మెంట్ నిర్ధారించబడింది",
+                dashboard_preview: "మీ డాష్‌బోర్డ్ ప్రివ్యూ",
+                dashboard_info: "మీ అపాయింట్‌మెంట్ వివరాలు, రిమైండర్‌లు మరియు మరిన్నింటిని యాక్సెస్ చేయండి.",
+                download_calendar: "క్యాలెండర్ ఈవెంట్‌ను డౌన్‌లోడ్ చేయండి",
+                reschedule: "మళ్లీ షెడ్యూల్ చేయండి",
+                close: "మూసివేయండి",
+                assistance: "సహాయం"
+            }
+        };
+
+        // Language Toggle
+        const languageToggle = document.getElementById('languageToggle');
+        function updateLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    elem.textContent = translations[lang][key];
+                }
+            });
+            document.querySelectorAll('input[placeholder]').forEach(input => {
+                const key = input.getAttribute('data-i18n');
+                if (key && translations[lang][key]) {
+                    input.placeholder = translations[lang][key];
+                }
+            });
+        }
+        languageToggle.addEventListener('change', () => {
+            updateLanguage(languageToggle.value);
+        });
+
+        // High-Contrast Mode
+        const toggleContrast = () => {
+            document.getElementById('mainBody').classList.toggle('high-contrast');
+        };
+
+        // Mock Data for Doctors and Availability
+        const doctorAvailability = {
+            cardiology: [
+                { name: "Dr. John Smith", times: ["09:00", "11:00", "14:00"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Alice Johnson", times: ["10:00", "13:00", "15:00"], dates: ["2025-10-12", "2025-10-14"] },
+                { name: "Dr. Robert Davis", times: ["08:00", "12:00", "16:00"], dates: ["2025-10-13", "2025-10-15"] },
+                { name: "Dr. Emma Wilson", times: ["09:30", "11:30", "14:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. James Taylor", times: ["10:30", "13:30", "15:30"], dates: ["2025-10-14", "2025-10-15"] }
+            ],
+            pediatrics: [
+                { name: "Dr. Sarah Lee", times: ["08:30", "12:00", "16:00"], dates: ["2025-10-13", "2025-10-15"] },
+                { name: "Dr. Olivia Green", times: ["09:00", "11:00", "14:00"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Noah Harris", times: ["10:00", "13:00", "15:00"], dates: ["2025-10-12", "2025-10-14"] },
+                { name: "Dr. Sophia Clark", times: ["08:00", "12:00", "16:00"], dates: ["2025-10-13", "2025-10-15"] },
+                { name: "Dr. Liam Lewis", times: ["09:30", "11:30", "14:30"], dates: ["2025-10-12", "2025-10-13"] }
+            ],
+            orthopedics: [
+                { name: "Dr. Anil Kumar", times: ["09:30", "11:30", "14:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Isabella Walker", times: ["10:30", "13:30", "15:30"], dates: ["2025-10-14", "2025-10-15"] },
+                { name: "Dr. Mason Hall", times: ["08:00", "12:30", "16:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Ava Young", times: ["09:00", "11:00", "14:00"], dates: ["2025-10-13", "2025-10-14"] },
+                { name: "Dr. Ethan King", times: ["10:00", "13:00", "15:00"], dates: ["2025-10-12", "2025-10-15"] }
+            ],
+            neurology: [
+                { name: "Dr. Emily Chen", times: ["10:30", "13:30", "15:30"], dates: ["2025-10-14", "2025-10-15"] },
+                { name: "Dr. Logan Wright", times: ["09:30", "11:30", "14:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Mia Scott", times: ["08:30", "12:00", "16:00"], dates: ["2025-10-13", "2025-10-15"] },
+                { name: "Dr. Lucas Adams", times: ["10:00", "13:00", "15:00"], dates: ["2025-10-12", "2025-10-14"] },
+                { name: "Dr. Harper Roberts", times: ["09:00", "11:00", "14:00"], dates: ["2025-10-12", "2025-10-13"] }
+            ],
+            oncology: [
+                { name: "Dr. Michael Brown", times: ["09:00", "11:00", "14:00"], dates: ["2025-10-13", "2025-10-14"] },
+                { name: "Dr. Evelyn Thompson", times: ["10:00", "13:00", "15:00"], dates: ["2025-10-12", "2025-10-15"] },
+                { name: "Dr. Benjamin Lee", times: ["08:30", "12:00", "16:00"], dates: ["2025-10-13", "2025-10-15"] },
+                { name: "Dr. Grace Evans", times: ["09:30", "11:30", "14:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Alexander Turner", times: ["10:30", "13:30", "15:30"], dates: ["2025-10-14", "2025-10-15"] }
+            ],
+            gynecology: [
+                { name: "Dr. Priya Sharma", times: ["08:00", "12:30", "16:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Zoe Mitchell", times: ["09:30", "11:30", "14:30"], dates: ["2025-10-14", "2025-10-15"] },
+                { name: "Dr. William Carter", times: ["10:30", "13:30", "15:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Amelia Hill", times: ["08:00", "12:00", "16:00"], dates: ["2025-10-13", "2025-10-15"] },
+                { name: "Dr. Jacob Baker", times: ["09:00", "11:00", "14:00"], dates: ["2025-10-12", "2025-10-14"] }
+            ],
+            gastroenterology: [
+                { name: "Dr. David Patel", times: ["10:00", "13:00", "15:00"], dates: ["2025-10-12", "2025-10-15"] },
+                { name: "Dr. Scarlett Nelson", times: ["09:00", "11:00", "14:00"], dates: ["2025-10-13", "2025-10-14"] },
+                { name: "Dr. Daniel Mitchell", times: ["08:00", "12:30", "16:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Victoria Perez", times: ["10:30", "13:30", "15:30"], dates: ["2025-10-14", "2025-10-15"] },
+                { name: "Dr. Christopher Gonzalez", times: ["09:30", "11:30", "14:30"], dates: ["2025-10-12", "2025-10-13"] }
+            ],
+            dermatology: [
+                { name: "Dr. Lisa Wong", times: ["09:00", "11:00", "14:00"], dates: ["2025-10-13", "2025-10-14"] },
+                { name: "Dr. Natalie Rivera", times: ["10:00", "13:00", "15:00"], dates: ["2025-10-12", "2025-10-15"] },
+                { name: "Dr. Anthony Flores", times: ["08:30", "12:00", "16:00"], dates: ["2025-10-13", "2025-10-15"] },
+                { name: "Dr. Samantha Collins", times: ["09:30", "11:30", "14:30"], dates: ["2025-10-12", "2025-10-13"] },
+                { name: "Dr. Matthew Stewart", times: ["10:30", "13:30", "15:30"], dates: ["2025-10-14", "2025-10-15"] }
+            ]
+        };
+
+        // Voice Input
+        let recognition;
+        let currentField = null;
+        let speakTimeout = null;
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = languageToggle.value === 'hi' ? 'hi-IN' : languageToggle.value === 'te' ? 'te-IN' : 'en-US';
+            recognition.onresult = (event) => {
+                let transcript = event.results[0][0].transcript.trim().toLowerCase();
+                transcript = transcript.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ''); // Remove punctuation
+                if (currentField) {
+                    const input = document.getElementById(currentField);
+                    if (input.tagName === 'INPUT') {
+                        if (currentField === 'patientEmail') {
+                            let emailName = transcript.replace(/\s/g, '').toLowerCase();
+                            input.value = emailName + '@gmail.com';
+                        } else if (currentField === 'contactNumber') {
+                            let digits = transcript.replace(/\D/g, '');
+                            input.value = digits.slice(0, 10);
+                        } else {
+                            input.value = transcript;
+                        }
+                    }
+                    speak(`Filled ${currentField}.`);
+                }
+            };
+            recognition.onerror = () => {
+                speak('Sorry, I didn’t catch that. Please try again.');
+            };
+            recognition.onend = () => {
+                if (currentField) {
+                    const button = document.querySelector(`[onclick="toggleVoiceInput('${currentField}')"]`);
+                    button.innerHTML = '<i class="fas fa-microphone"></i>';
+                }
+                currentField = null;
+            };
+        }
+
+        function toggleVoiceInput(fieldId) {
+            const input = document.getElementById(fieldId);
+            const button = input.parentElement.querySelector('.voice-btn');
+            if (!recognition) {
+                alert('Voice input is not supported in this browser.');
+                return;
+            }
+
+            if (currentField === fieldId) {
+                recognition.stop();
+                button.innerHTML = '<i class="fas fa-microphone"></i>';
+                currentField = null;
+                return;
+            }
+
+            recognition.lang = languageToggle.value === 'hi' ? 'hi-IN' : languageToggle.value === 'te' ? 'te-IN' : 'en-US';
+            currentField = fieldId;
+            button.innerHTML = '<i class="fas fa-stop"></i>';
+            recognition.start();
+        }
+
+        function speak(text) {
+            if (speakTimeout) clearTimeout(speakTimeout);
+            speakTimeout = setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = languageToggle.value === 'hi' ? 'hi-IN' : languageToggle.value === 'te' ? 'te-IN' : 'en-US';
+                speechSynthesis.speak(utterance);
+            }, 500);
+        }
+
+        // Multi-Step Form Logic
+        const form = document.getElementById('appointmentForm');
+        const steps = form.querySelectorAll('.step');
+        const nextButtons = form.querySelectorAll('.next-btn');
+        const prevButtons = form.querySelectorAll('.prev-btn');
+        const progressBar = document.getElementById('progressBar');
+        const progressHeart = document.getElementById('progressHeart');
+        let currentStep = 1;
+
+        // Load previous appointment data if available, but reset on back navigation
+        document.addEventListener('DOMContentLoaded', () => {
+            const prevData = sessionStorage.getItem('appointmentData');
+            if (prevData) {
+                const data = JSON.parse(prevData);
+                // Only load data if not coming back from submission
+                if (!window.history.state || !window.history.state.fromSubmission) {
+                    if (data.department) {
+                        document.getElementById('departmentSelect').value = data.department;
+                        updateDoctorOptions(data.department);
+                    }
+                    if (data.doctor) {
+                        document.getElementById('doctorSelect').value = data.doctor;
+                    }
+                    if (data.date) {
+                        const dateParts = data.date.split('-');
+                        if (dateParts.length === 3) {
+                            document.getElementById('yearSelect').value = dateParts[0];
+                            document.getElementById('monthSelect').value = dateParts[1];
+                            document.getElementById('daySelect').value = dateParts[2];
+                        }
+                    }
+                    if (data.timePreference) {
+                        document.getElementById('timePreference').value = data.timePreference;
+                    }
+                } else {
+                    // Reset form if coming back from submission
+                    document.getElementById('departmentSelect').value = "";
+                    document.getElementById('doctorSelect').innerHTML = '<option value="" data-i18n="select_doctor">Select Doctor (Optional)</option>';
+                    document.getElementById('daySelect').value = "";
+                    document.getElementById('monthSelect').value = "";
+                    document.getElementById('yearSelect').value = "";
+                    document.getElementById('timePreference').value = "";
+                    sessionStorage.removeItem('appointmentData'); // Clear session data on reset
+                }
+            }
+        });
+
+        function updateStep(step) {
+            steps.forEach(s => s.classList.remove('active'));
+            steps[step - 1].classList.add('active');
+            const progress = (step / 3) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressHeart.style.left = `calc(${progress}% - 12px)`;
+            progressHeart.classList.add('animate-bounce');
+            setTimeout(() => progressHeart.classList.remove('animate-bounce'), 500);
+            currentStep = step;
+        }
+
+        nextButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (currentStep < 3) {
+                    const inputs = steps[currentStep - 1].querySelectorAll('[required]');
+                    let valid = true;
+                    inputs.forEach(input => {
+                        if (!input.value) valid = false;
+                    });
+                    if (!valid) {
+                        speak('Please fill all required fields.');
+                    } else {
+                        updateStep(currentStep + 1);
+                        if (currentStep === 3) {
+                            displayConfirmation();
+                        }
+                    }
+                }
+            });
+        });
+
+        prevButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (currentStep > 1) {
+                    updateStep(currentStep - 1);
+                }
+            });
+        });
+
+        // Date Selection
+        const daySelect = document.getElementById('daySelect');
+        const monthSelect = document.getElementById('monthSelect');
+        const yearSelect = document.getElementById('yearSelect');
+        const dateInput = document.getElementById('dateInput');
+
+        [daySelect, monthSelect, yearSelect].forEach(select => {
+            select.addEventListener('change', () => {
+                const day = daySelect.value;
+                const month = monthSelect.value;
+                const year = yearSelect.value;
+                if (day && month && year) {
+                    const date = new Date(year, month - 1, day);
+                    dateInput.value = date.toISOString().split('T')[0];
+                }
+            });
+        });
+
+        // Real-Time Availability and Smart Suggestions
+        const departmentSelect = document.getElementById('departmentSelect');
+        const doctorSelect = document.getElementById('doctorSelect');
+        const timePreference = document.getElementById('timePreference');
+
+        function updateDoctorOptions(department) {
+            doctorSelect.innerHTML = '<option value="" data-i18n="select_doctor">Select Doctor (Optional)</option>';
+            if (department && doctorAvailability[department]) {
+                doctorAvailability[department].forEach(doctor => {
+                    const option = document.createElement('option');
+                    option.value = doctor.name;
+                    option.textContent = doctor.name;
+                    doctorSelect.appendChild(option);
+                });
+                updateLanguage(languageToggle.value);
+            }
+        }
+
+        departmentSelect.addEventListener('change', () => {
+            const department = departmentSelect.value;
+            updateDoctorOptions(department);
+        });
+
+        timePreference.addEventListener('change', () => {
+            updateTimeSlots();
+        });
+
+        function updateTimeSlots() {
+            const department = departmentSelect.value;
+            const pref = timePreference.value;
+            if (department && doctorAvailability[department]) {
+                const selectedDoctor = doctorAvailability[department].find(d => d.name === doctorSelect.value);
+                let times = selectedDoctor ? selectedDoctor.times : doctorAvailability[department][0].times;
+                if (pref === 'morning') {
+                    times = times.filter(time => parseInt(time.split(':')[0]) < 12);
+                } else if (pref === 'afternoon') {
+                    times = times.filter(time => parseInt(time.split(':')[0]) >= 12);
+                }
+            }
+        }
+
+        // Confirmation Details
+        function displayConfirmation() {
+            const formData = new FormData(form);
+            const day = formData.get('day');
+            const month = formData.get('month');
+            const year = formData.get('year');
+            const date = new Date(year, month - 1, day).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            const details = `
+                <p><strong data-i18n="patient_name">Patient Name:</strong> ${formData.get('name')}</p>
+                <p><strong data-i18n="contact_number">Phone:</strong> ${formData.get('phone')}</p>
+                <p><strong data-i18n="email">Email:</strong> ${formData.get('email')}</p>
+                <p><strong data-i18n="department">Department:</strong> ${formData.get('department')}</p>
+                <p><strong data-i18n="doctor_preference">Doctor:</strong> ${formData.get('doctor') || 'Not specified'}</p>
+                <p><strong data-i18n="date">Date:</strong> ${date}</p>
+                <p><strong data-i18n="time_preference">Preferred Time:</strong> ${formData.get('timePreference') || 'Not specified'}</p>
+            `;
+            document.getElementById('confirmationDetails').innerHTML = details;
+            updateLanguage(languageToggle.value);
+        }
+
+        // Form Submission
+        const confirmationModal = document.getElementById('confirmationModal');
+        const modalDetails = document.getElementById('modalDetails');
+        const closeModal = document.getElementById('closeModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const rescheduleBtn = document.getElementById('rescheduleBtn');
+        const downloadCalendar = document.getElementById('downloadCalendar');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            sessionStorage.setItem('appointmentData', JSON.stringify({
+                name: formData.get('name'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                department: formData.get('department'),
+                doctor: formData.get('doctor') || 'Not specified',
+                date: formData.get('date'),
+                timePreference: formData.get('timePreference')
+            }));
+            window.history.pushState({ fromSubmission: true }, '', '4appointments.html'); // Mark as coming from submission
+            window.location.href = 'after_appointment.html';
+        });
+
+        closeModal.addEventListener('click', () => {
+            confirmationModal.classList.add('hidden');
+        });
+
+        modalCloseBtn.addEventListener('click', () => {
+            confirmationModal.classList.add('hidden');
+        });
+
+        rescheduleBtn.addEventListener('click', () => {
+            confirmationModal.classList.add('hidden');
+            updateStep(2);
+            speak('Let’s reschedule your appointment.');
+        });
+
+        downloadCalendar.addEventListener('click', () => {
+            const formData = new FormData(form);
+            const date = formData.get('date');
+            const time = doctorAvailability[formData.get('department')].find(d => d.name === formData.get('doctor'))?.times[0] || '09:00';
+            const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:NBKR Hospital Appointment
+DTSTART:${date.replace(/-/g, '')}T${time.replace(':', '')}00
+DTEND:${date.replace(/-/g, '')}T${time.replace(':', '')}30
+DESCRIPTION:Appointment with ${formData.get('doctor') || 'Doctor'} in ${formData.get('department')}
+LOCATION:123 Health St, Vidyanagar, AP, India
+END:VEVENT
+END:VCALENDAR`;
+            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'nbkr_appointment.ics';
+            link.click();
+            speak('Calendar event downloaded.');
+        });
+
+        // Accessibility: Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !confirmationModal.classList.contains('hidden')) {
+                confirmationModal.classList.add('hidden');
+            }
+            if (e.key === 'h') {
+                toggleContrast();
+                speak('Toggled high-contrast mode.');
+            }
+        });
+
+        // Handle back navigation to reset form
+        window.onpopstate = function(event) {
+            if (event.state && event.state.fromSubmission) {
+                document.getElementById('departmentSelect').value = "";
+                document.getElementById('doctorSelect').innerHTML = '<option value="" data-i18n="select_doctor">Select Doctor (Optional)</option>';
+                document.getElementById('daySelect').value = "";
+                document.getElementById('monthSelect').value = "";
+                document.getElementById('yearSelect').value = "";
+                document.getElementById('timePreference').value = "";
+                sessionStorage.removeItem('appointmentData'); // Clear session data on back navigation
+                updateStep(2); // Return to appointment details step
+            }
+        };
+    </script>
+</body>
+</html>

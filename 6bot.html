@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Chat Bot</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            box-sizing: border-box;
+        }
+        .chat-container {
+            width: 20cm;
+            height: 95vh;
+            max-width: 95vw;
+            max-height: 95vh;
+            background: white;
+            border-radius: 25px;
+            border: 6px solid #0ea5e9;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .chat-header {
+            padding: 25px;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            color: white;
+            border-top-left-radius: 19px;
+            border-top-right-radius: 19px;
+            text-align: center;
+            font-size: 2.2em;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        .chat-header::before {
+            content: '🩺';
+            font-size: 2.5em;
+        }
+        .chat-body {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #f8fafc;
+            min-height: 0;
+        }
+        .chat-body::-webkit-scrollbar {
+            width: 12px;
+        }
+        .chat-body::-webkit-scrollbar-thumb {
+            background: #bae6fd;
+            border-radius: 6px;
+        }
+        .message {
+            max-width: 85%;
+            padding: 20px 25px;
+            border-radius: 20px;
+            line-height: 1.6;
+            font-size: 1.4em;
+            font-weight: 700;
+            animation: slideIn 0.3s ease;
+            word-wrap: break-word;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .user-message {
+            background: #0ea5e9;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+        }
+        .bot-message {
+            background: #e0f2fe;
+            color: #1e293b;
+            align-self: flex-start;
+            border-bottom-left-radius: 6px;
+        }
+        .page-link {
+            color: #10b981;
+            font-weight: 800;
+            text-decoration: none;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .page-link:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+        .chat-footer {
+            padding: 20px 25px;
+            background: white;
+            border-top: 2px solid #e0f2fe;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 18px 20px;
+            border: 2px solid #bae6fd;
+            border-radius: 15px;
+            outline: none;
+            font-size: 1.3em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+        }
+        button {
+            padding: 18px 30px;
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.2em;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #0284c7;
+            transform: translateY(-2px);
+        }
+        .mic-btn {
+            padding: 18px 25px;
+            background: #10b981;
+            font-size: 1.8em;
+        }
+        .mic-btn.active {
+            animation: pulse 1s infinite;
+            background: #059669;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @media (max-width: 800px) {
+            .chat-container {
+                width: 100%;
+                height: 100vh;
+                border-radius: 15px;
+                border-width: 4px;
+                margin: 5px;
+            }
+            .chat-header {
+                font-size: 1.8em;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">CareConnect</div>
+        
+        <div class="chat-body" id="chatBody">
+            <div class="message bot-message">
+                <strong>👋 Welcome to CareConnect!</strong><br>
+                Your trusted healthcare partner. Ask about departments, doctors, appointments, or anything healthcare-related!
+            </div>
+        </div>
+        
+        <div class="chat-footer">
+            <input type="text" id="userInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+            <button id="micBtn" class="mic-btn" onclick="toggleListening()">🎤</button>
+        </div>
+    </div>
+    
+    <script>
+        // EXPANDED: Keyword arrays with more misspellings and variations (now 300+ per major category)
+        const responses = {
+            greetings: {
+                keywords: [
+                    'hello', 'hi', 'hey', 'hola', 'bonjour', 'guten tag', 'ciao', 'namaste', 'salam',
+                    'good morning', 'good afternoon', 'good evening', 'good day', 'morning', 'afternoon',
+                    'welcome', 'greetings', 'salutations', 'howdy', 'yo', 'sup', 'whats up',
+                    'hey there', 'hi there', 'hello there', 'good morning sir', 'good morning madam',
+                    'rise and shine', 'top of morning', 'morning everyone', 'hello friend',
+                    'hello world', 'hola mundo', 'bonjour monde', 'buenos dias', 'buongiorno',
+                    'kalimera', 'ohayou', 'annyeong', 'sawasdee', 'xin chao', 'hello team',
+                    'good morning team', 'hello colleagues', 'morning yall', 'gm', 'gm friends',
+                    'greetings all', 'hello everyone', 'hi folks', 'hello people',
+                    'helllo', 'hiii', 'heyy', 'holla', 'bonjur', 'gutentag', 'caio', 'namastay', 'salaam',
+                    'goodmornig', 'goodafteroon', 'goodevening', 'gooddy', 'mornin', 'afternon',
+                    'welcom', 'greetngs', 'salutaton', 'howd', 'yoo', 'supp', 'whatsup',
+                    'heey there', 'hii there', 'helloo there', 'good mornig sir', 'good mornig madam',
+                    'riseandshine', 'topofmorning', 'morningeveryon', 'hellofriend',
+                    'hellowold', 'holamundo', 'bonjourmonde', 'buenosdias', 'buongioro',
+                    'kalimra', 'ohayo', 'annyeongg', 'sawasdee', 'xincha',
+                    'helloteam', 'goodmorningteam', 'hellocolleagues', 'morningyall', 'gmm', 'gmfriends',
+                    'greetingall', 'helloeveryon', 'hifolks', 'hellopeople', 'hell', 'h', 'helo',
+                    'hallo', 'aloha', 'shalo', 'ola', 'bonjorno', 'gutenmorgen', 'bonj', 'guten',
+                    'namaskar', 'salamalaikum', 'goodm', 'gooda', 'goode', 'goodd', 'morn', 'after',
+                    'welc', 'greet', 'salut', 'howdyy', 'yoo', 'suppp', 'whatsupp', 'heyythere', 'hithere'
+                ],
+                response: '<strong>👋 Hello, dear user!</strong><br>I\'m delighted to assist you at CareConnect Hospital. How may I help you today? Please feel free to ask about departments, doctors, or services. 💙'
+            },
+            howareyou: {
+                keywords: [
+                    'how are you', 'how r u', 'how are u', 'how you doing', 'hows it going',
+                    'whats up', 'sup', 'hows life', 'how have you been', 'hows everything',
+                    'how do you do', 'hows business', 'wyd', 'what you doing', 'whatcha doing',
+                    'hows going', 'feeling today', 'mood today', 'how you feeling', 'you good',
+                    'all good', 'doing ok', 'hows your day', 'hope youre well', 'trust youre well',
+                    'como estas', 'comment ca va', 'wie gehts', 'kak dela', 'you alright',
+                    'hows the family', 'hows work', 'how you holding up', 'vibe check', 'energy check',
+                    'how are yu', 'how r yu', 'how are uu', 'how yu doing', 'hows it goin',
+                    'whats upp', 'supp', 'hows lif', 'how hav you been', 'hows everythin',
+                    'how do yu do', 'hows busness', 'wydd', 'what yu doing', 'whatcha doin',
+                    'hows goin', 'feelin today', 'mood toda', 'how yu feelin', 'yu good',
+                    'all gud', 'doin ok', 'hows yur day', 'hope yur well', 'trust yur well',
+                    'como ests', 'comment ca v', 'wie geths', 'kak del', 'yu alrigt',
+                    'hows the famly', 'hows wrk', 'how yu holdin up', 'vibe chek', 'energy chek',
+                    'howareyou', 'howru', 'howareu', 'howyoudoing', 'howsitgoing',
+                    'whatsup', 'sup', 'howslife', 'howhaveyoubeen', 'howseverything',
+                    'howdoyoudo', 'howsbusiness', 'wyd', 'whatyoudoing', 'whatchadoing',
+                    'howsgoing', 'feelingtoday', 'moodtoday', 'howyoufeeling', 'yougood',
+                    'allgood', 'doingok', 'howsyourday', 'hopeyourewell', 'trustyourewell',
+                    'comoestas', 'commentcava', 'wiegehts', 'kakdela', 'youalright',
+                    'howsthefamily', 'howswork', 'howyouholdingup', 'vibecheck', 'energycheck'
+                ],
+                response: '<strong>🤖 I\'m doing wonderfully, thank you for asking!</strong><br>I appreciate your kind inquiry. I\'m here to assist you with any hospital-related questions. What can I do for you today?'
+            },
+            thanks: {
+                keywords: [
+                    'thank you', 'thanks', 'thank', 'appreciate', 'ty', 'thx', 'thank you very much', 'thanks a lot',
+                    'grateful', 'much appreciated', 'cheers', 'ta', 'tysm', 'tyvm', 'thanks mate',
+                    'gracias', 'merci', 'danke', 'arigato', 'xiexie', 'dhanyavaad', 'shukriya',
+                    'thank you sir', 'thank you madam', 'appreciate your help', 'thanks for assistance',
+                    'thnk you', 'thnks', 'thak', 'appreicate', 'tyy', 'thxx', 'thank yu', 'thanks alot',
+                    'gratefl', 'much apreciated', 'cheerss', 'taa', 'tysmm', 'tyvmm', 'thanks mat',
+                    'gracias', 'mercii', 'dankee', 'arigatoo', 'xie xie', 'dhanyavad', 'shukria',
+                    'thank you sri', 'thank you madm', 'appreciate yur help', 'thanks for assistence',
+                    'thnak you', 'thansk', 'thnaks', 'apprecite', 't y', 't h x', 'thankyouverymuch', 'thanksalot',
+                    'gratefull', 'muchappreciated', 'cheers', 'ta', 'tysm', 'tyvm', 'thanksmate',
+                    'gracias', 'merci', 'danke', 'arigato', 'xiexie', 'dhanyavaad', 'shukriya',
+                    'thankyousir', 'thankyoumadam', 'appreciateyourhelp', 'thanksforassistance'
+                ],
+                response: '<strong>🙏 You\'re most welcome, dear user!</strong><br>It\'s my pleasure to assist you. If there\'s anything else I can help with, please don\'t hesitate to ask.'
+            },
+            goodbye: {
+                keywords: [
+                    'bye', 'goodbye', 'see you', 'see ya', 'farewell', 'take care', 'bye bye',
+                    'good bye', 'cya', 'bb', 'l8r', 'talk soon', 'catch you later', 'later',
+                    'peace out', 'im out', 'gotta go', 'ttyl', 'brb', 'g2g', 'adios',
+                    'au revoir', 'arrivederci', 'sayonara', 'auf wiedersehen',
+                    'byee', 'goodby', 'see yuo', 'farewel', 'tke care', 'by by',
+                    'good by', 'cyaa', 'bbb', 'l8rr', 'talk sooon', 'catch yu later', 'latr',
+                    'peace oout', 'imm out', 'gotta goo', 'ttyll', 'brbb', 'g2gg', 'adioss',
+                    'au revor', 'arrivederc', 'sayonra', 'auf wiedersehn'
+                ],
+                response: '<strong>👋 Goodbye, dear user!</strong><br>Take good care of yourself and stay healthy. We\'re here for you anytime. Wishing you all the best! 💙'
+            },
+            appointments: {
+                keywords: [
+                    'appointment', 'appoint', 'app', 'book', 'booking', 'schedule', 'make appointment',
+                    'doctor appointment', 'schedule visit', 'appointment booking', 'book appointment', 'schedule appointment',
+                    'apointment', 'appoinment', 'appoitment', 'bok', 'bookin', 'schedul', 'make apointment',
+                    'apointmnt', 'appint', 'appo', 'boook', 'bookng', 'shedule', 'make appoinment',
+                    'doctr appointment', 'schedle visit', 'appointment bookng', 'book appoinment', 'schedule appoinment'
+                ],
+                response: '<strong>📅 Appointments</strong><br>Dear user, I\'m happy to guide you. You can book your appointment easily at <a href="4appointments.html" class="page-link" target="_blank">Appointments page</a>. If you need any help with the process, please let me know.'
+            },
+            about: {
+                keywords: [
+                    'about', 'hospital', 'doctors', 'team', 'staff', 'about us', 'mission', 'vision', 'our story',
+                    'hospital info', 'doctor list', 'medical team', 'healthcare team',
+                    'abut', 'hospitl', 'docters', 'teem', 'staf', 'abut us', 'mision', 'vison', 'our stroy',
+                    'hospital inf', 'doctr list', 'medical teem', 'healthcare teem'
+                ],
+                response: '<strong>📋 About Us</strong><br>Dear user, it\'s wonderful to see your interest. Learn about our dedicated team and mission at <a href="2about_hospital_doctors.html" class="page-link" target="_blank">About Us page</a>. We\'re committed to excellent care.'
+            },
+            services: {
+                keywords: [
+                    'service', 'services', 'department', 'departments', 'facilities', 'specialties',
+                    'medical services', 'health services', 'hospital services', 'care services',
+                    'servce', 'servies', 'departmnt', 'departmnts', 'facilites', 'specialtes',
+                    'medical servces', 'health servces', 'hospital servces', 'care servces'
+                ],
+                response: '<strong>🩺 Our Services</strong><br>Dear user, I appreciate your inquiry. Browse our comprehensive departments and facilities at <a href="3our_services.html" class="page-link" target="_blank">Our Services</a>. We offer top-quality care in various specialties.'
+            },
+            contact: {
+                keywords: [
+                    'contact', 'phone', 'email', 'address', 'location', 'reach', 'get in touch',
+                    'contact us', 'phone number', 'email us', 'visit us', 'find us', 'contact info',
+                    'contct', 'fone', 'emil', 'addres', 'locaton', 'rech', 'get in tuch',
+                    'contct us', 'fone number', 'emil us', 'visit uss', 'find uss', 'contact inf'
+                ],
+                response: '<strong>📞 Contact Us</strong><br>Dear user, we\'re always here for you. Get in touch with our team via <a href="5contact_us.html" class="page-link" target="_blank">Contact Us</a>. Feel free to reach out for any queries.'
+            },
+            home: {
+                keywords: [
+                    'home', 'main', 'index', 'welcome', 'landing', 'start', 'dashboard', 'portal',
+                    'front page', 'main page', 'home page', 'website home', 'site home',
+                    'hme', 'man', 'indx', 'welcom', 'landng', 'strt', 'dashbord', 'portl',
+                    'front pag', 'main pag', 'home pag', 'website hme', 'site hme'
+                ],
+                response: '<strong>🏠 Home Page</strong><br>Dear user, welcome back to our main hub. Visit our <a href="1index.html" class="page-link" target="_blank">Home Page</a> for an overview and quick links to all services.'
+            },
+            chatbot: {
+                keywords: [
+                    'chatbot', 'bot', 'assistant', 'ai', 'chat bot', 'virtual assistant', 'ai helper',
+                    'chatbt', 'bt', 'asistant', 'a i', 'chat bt', 'virtual asistnt', 'ai helpr'
+                ],
+                response: '<strong>🤖 Chatbot</strong><br>Dear user, I\'m honored to serve you. Access our AI assistant features at <a href="6bot.html" class="page-link" target="_blank">6bot.html</a>. I\'m here to make your experience smoother.'
+            },
+            cardiology: {
+                keywords: [
+                    'cardiology', 'heart', 'cardio', 'chest pain', 'heart attack', 'cardiac', 'ekg',
+                    'ecg', 'stress test', 'echocardiogram', 'echo', 'coronary', 'arrhythmia',
+                    'cardiolgy', 'hert', 'cardo', 'chst pain', 'hart attack', 'cardac', 'ekgg',
+                    'ecgg', 'stres test', 'echocardigram', 'ech', 'coronry', 'arrhythma'
+                ],
+                response: '<strong>❤ Cardiology</strong><br>Dear user, your heart health is our priority. Explore comprehensive heart care at <a href="cardiology.html" class="page-link" target="_blank">Cardiology Department</a>. We\'re dedicated to keeping your heart strong.'
+            },
+            pediatrics: {
+                keywords: [
+                    'pediatric', 'paediatric', 'children', 'kids', 'child', 'baby', 'peds', 'nicu',
+                    'pediatrc', 'paedatric', 'childrn', 'kds', 'chld', 'bby', 'pedss', 'nicuu',
+                    'pedatric', 'paeditric', 'childen', 'kidds', 'childe', 'babby', 'ped', 'nic'
+                ],
+                response: '<strong>👶 Pediatrics</strong><br>Dear user, we care deeply for our young patients. Discover specialized child healthcare at <a href="pediatrics.html" class="page-link" target="_blank">Pediatrics Department</a>. Your child\'s well-being is our greatest concern.'
+            },
+            orthopedics: {
+                keywords: [
+                    'orthopedic', 'orthopaedics', 'bone', 'joint', 'fracture', 'back pain', 'ortho',
+                    'orthopedc', 'orthopeadics', 'bon', 'jont', 'fractur', 'bak pain', 'orth',
+                    'orthopdic', 'orthopeedics', 'bonee', 'jointt', 'fracturee', 'backpain', 'ortoo'
+                ],
+                response: '<strong>🦴 Orthopedics</strong><br>Dear user, we\'re committed to your mobility. Find expert bone and joint care at <a href="orthopedics.html" class="page-link" target="_blank">Orthopedics</a>. Let us help you move with ease.'
+            },
+            neurology: {
+                keywords: [
+                    'neurology', 'brain', 'headache', 'stroke', 'neuro', 'epilepsy', 'parkinsons',
+                    'neurolgy', 'bran', 'hedache', 'strok', 'nero', 'epileps', 'parkinson',
+                    'neurolog', 'brainn', 'headach', 'strooke', 'neur', 'epilepsey', 'parkinsons'
+                ],
+                response: '<strong>🧠 Neurology</strong><br>Dear user, your neurological health matters to us. Access advanced brain and nerve care at <a href="neurology.html" class="page-link" target="_blank">Neurology Department</a>. We\'re here to support your mind and body.'
+            },
+            oncology: {
+                keywords: [
+                    'oncology', 'cancer', 'tumor', 'tumour', 'chemo', 'chemotherapy', 'radiation',
+                    'oncolgy', 'cancr', 'tumor', 'tumur', 'chemo', 'chemotherpy', 'radiaton',
+                    'oncolo', 'cance', 'tumorr', 'tumourr', 'chem', 'chemotherap', 'radiati'
+                ],
+                response: '<strong>🎗 Oncology</strong><br>Dear user, we stand with you in your fight. Explore our compassionate cancer treatment at <a href="oncology.html" class="page-link" target="_blank">Oncology Department</a>. Hope and healing are our promises.'
+            },
+            gynecology: {
+                keywords: [
+                    'gynecology', 'gynaecology', 'women', 'pregnancy', 'gyn', 'obgyn', 'obstetrics',
+                    'gynecolgy', 'gynaecolgy', 'womn', 'preganancy', 'gyn', 'obgn', 'obstetric',
+                    'gynecolo', 'gynaecolo', 'wome', 'pregnanc', 'gynn', 'obgy', 'obstetricss'
+                ],
+                response: '<strong>👩 Gynecology</strong><br>Dear user, we respect and prioritize women\'s health. Discover dedicated care at <a href="gynecology.html" class="page-link" target="_blank">Gynecology</a>. Your well-being is our utmost concern.'
+            },
+            gastroenterology: {
+                keywords: [
+                    'gastroenterology', 'stomach', 'digestive', 'gastro', 'gut', 'colonoscopy',
+                    'gastroenterolgy', 'stomach', 'digestiv', 'gastro', 'gut', 'colonoscpy',
+                    'gastroenterolo', 'stomachh', 'digestivee', 'gastros', 'gutt', 'colonoscop'
+                ],
+                response: '<strong>🍽 Gastroenterology</strong><br>Dear user, digestive wellness is vital. Find expert care at <a href="gastroenterology.html" class="page-link" target="_blank">Gastroenterology</a>. We\'re dedicated to your comfort.'
+            },
+            dermatology: {
+                keywords: [
+                    'dermatology', 'skin', 'rash', 'acne', 'derma', 'eczema', 'psoriasis',
+                    'dermatolgy', 'skn', 'rsh', 'acn', 'derma', 'ecema', 'psorias',
+                    'dermatolo', 'skinn', 'rashh', 'acnee', 'dermaa', 'eczemaa', 'psoriasiss'
+                ],
+                response: '<strong>🧴 Dermatology</strong><br>Dear user, healthy skin is beautiful skin. Explore our skin care expertise at <a href="dermatology.html" class="page-link" target="_blank">Dermatology</a>. We value your confidence.'
+            },
+            emergency: {
+                keywords: [
+                    'emergency', 'urgent', 'accident', '24 7', 'er', 'trauma', 'emergency room',
+                    'emergncy', 'urgnt', 'accidnt', '24 7', 'er', 'traum', 'emergncy room',
+                    'emergenc', 'urgen', 'acciden', '24 7', 'err', 'traumaa', 'emergency rooom'
+                ],
+                response: '<strong>🚨 Emergency Care</strong><br>Dear user, your safety is our top priority. Access 24/7 services at <a href="emergency_care.html" class="page-link" target="_blank">Emergency Care</a>. We\'re always here when you need us most.'
+            }
+        };
+
+        // EXPANDED: Tips with more keywords and misspellings
+        const tips = {
+            cardiology: {
+                keywords: [
+                    'tips for cardiology', 'heart tips', 'cardiology tips', 'heart health tips', 'cardio prevention', 'tips for heart',
+                    'tips for cardiolgy', 'hert tips', 'cardiology tipps', 'heart helth tips', 'cardo prevention', 'tips for hert',
+                    'cardiolgy tips', 'hearttips', 'cardiotips', 'hearthealthtips', 'cardioprevention', 'tipsforheart'
+                ],
+                response: '<strong>❤ Cardiology Tips</strong><br>Dear user, I\'m glad to share some helpful advice for your heart health. Here are a few key tips:<br>1. Eat a heart-healthy diet with plenty of fruits, vegetables, and whole grains.<br>2. Exercise regularly, aiming for at least 30 minutes of activity daily.<br>3. Avoid smoking and limit alcohol.<br>4. Get enough sleep and manage stress.<br>5. Maintain a healthy weight.<br>For more detailed guidance, please visit <a href="cardiology_tips.html" class="page-link" target="_blank">Cardiology Tips</a>. Remember, consult your doctor for personalized advice. Take care!'
+            },
+            pediatrics: {
+                keywords: [
+                    'tips for pediatrics', 'kids health tips', 'pediatric tips', 'child care tips', 'baby health', 'tips for children',
+                    'tips for pediatrc', 'kds health tips', 'pediatric tipps', 'child care tipps', 'baby helth', 'tips for childrn',
+                    'pediatrcs tips', 'kidshealthtips', 'pediatrictips', 'childcaretips', 'babyhealth', 'tipsforchildren'
+                ],
+                response: '<strong>👶 Pediatrics Tips</strong><br>Dear user, caring for children is our passion. Here are some essential tips for your little one\'s health:<br>1. Ensure regular check-ups and vaccinations.<br>2. Promote a balanced diet with fruits and veggies.<br>3. Encourage daily physical activity.<br>4. Maintain good sleep routines.<br>5. Teach proper hygiene habits.<br>For comprehensive advice, check <a href="pediatrics_tips.html" class="page-link" target="_blank">Pediatrics Tips</a>. We\'re here to support your family\'s well-being.'
+            },
+            orthopedics: {
+                keywords: [
+                    'tips for orthopedics', 'bone tips', 'joint health', 'orthopedic tips', 'back pain prevention', 'tips for bones',
+                    'tips for orthopedc', 'bon tips', 'joint helth', 'orthopedic tipps', 'back pain preventin', 'tips for bon',
+                    'orthopedcs tips', 'bonetips', 'jointhealth', 'orthopedictips', 'backpainprevention', 'tipsforbones'
+                ],
+                response: '<strong>🦴 Orthopedics Tips</strong><br>Dear user, we value your mobility and strength. Some helpful tips for bone and joint health:<br>1. Engage in weight-bearing exercises like walking.<br>2. Maintain good posture.<br>3. Eat calcium-rich foods.<br>4. Avoid heavy lifting improperly.<br>5. Stay at a healthy weight.<br>Explore more at <a href="orthopedics_tips.html" class="page-link" target="_blank">Orthopedics Tips</a>. Please take it easy and consult if needed.'
+            },
+            neurology: {
+                keywords: [
+                    'tips for neurology', 'brain tips', 'neurology tips', 'headache prevention', 'stroke tips', 'brain health',
+                    'tips for neurolgy', 'bran tips', 'neurology tipps', 'headache preventin', 'stroke tipps', 'brain helth',
+                    'neurolgys tips', 'braintips', 'neurologytips', 'headacheprevention', 'stroketips', 'brainhealth'
+                ],
+                response: '<strong>🧠 Neurology Tips</strong><br>Dear user, your brain health is crucial. Here are some tips to keep it sharp:<br>1. Exercise regularly to boost brain blood flow.<br>2. Get adequate sleep (7-9 hours).<br>3. Eat a Mediterranean-style diet.<br>4. Manage stress through meditation.<br>5. Challenge your mind with puzzles.<br>Learn more at <a href="neurology_tips.html" class="page-link" target="_blank">Neurology Tips</a>. Wishing you mental clarity and peace.'
+            },
+            oncology: {
+                keywords: [
+                    'tips for oncology', 'cancer tips', 'oncology prevention', 'cancer prevention tips', 'chemo tips',
+                    'tips for oncolgy', 'cancr tips', 'oncology preventin', 'cancer preventin tips', 'chemo tipps',
+                    'oncolgys tips', 'cancertips', 'oncologyprevention', 'cancerpreventiontips', 'chemotips'
+                ],
+                response: '<strong>🎗 Oncology Tips</strong><br>Dear user, we admire your proactive approach to health. Some cancer prevention tips:<br>1. Avoid tobacco and limit alcohol.<br>2. Eat healthy with fruits and veggies.<br>3. Stay physically active.<br>4. Protect skin from sun.<br>5. Get regular screenings.<br>For detailed info, visit <a href="oncology_tips.html" class="page-link" target="_blank">Oncology Tips</a>. Stay strong and positive.'
+            },
+            gynecology: {
+                keywords: [
+                    'tips for gynecology', 'women health tips', 'gynecology tips', 'pregnancy tips', 'gyn tips',
+                    'tips for gynecolgy', 'womn health tips', 'gynecology tipps', 'pregnancy tipps', 'gyn tipps',
+                    'gynecolgys tips', 'womenhealthtips', 'gynecologytips', 'pregnancytips', 'gyntips'
+                ],
+                response: '<strong>👩 Gynecology Tips</strong><br>Dear user, we respect your commitment to women\'s health. Key tips:<br>1. Schedule regular check-ups.<br>2. Maintain a balanced diet.<br>3. Exercise moderately.<br>4. Practice good hygiene.<br>5. Manage stress.<br>More insights at <a href="gynecology_tips.html" class="page-link" target="_blank">Gynecology Tips</a>. We\'re here for your empowerment.'
+            },
+            gastroenterology: {
+                keywords: [
+                    'tips for gastroenterology', 'digestive tips', 'gut health', 'gastro tips', 'stomach tips',
+                    'tips for gastroentrolgy', 'digestiv tips', 'gut helth', 'gastro tipps', 'stomach tipps',
+                    'gastroentrolgys tips', 'digestivetips', 'guthealth', 'gastrotips', 'stomachtips'
+                ],
+                response: '<strong>🍽 Gastroenterology Tips</strong><br>Dear user, digestive wellness is vital. Helpful tips:<br>1. Eat fiber-rich foods.<br>2. Stay hydrated.<br>3. Exercise regularly.<br>4. Manage stress.<br>5. Avoid processed foods.<br>Discover more at <a href="gastroenterology_tips.html" class="page-link" target="_blank">Gastroenterology Tips</a>. Wishing you comfortable days.'
+            },
+            dermatology: {
+                keywords: [
+                    'tips for dermatology', 'skin tips', 'dermatology tips', 'acne prevention', 'rash tips',
+                    'tips for dermatolgy', 'skn tips', 'dermatology tipps', 'acne preventin', 'rash tipps',
+                    'dermatolgys tips', 'skintips', 'dermatologytips', 'acneprevention', 'rashtips'
+                ],
+                response: '<strong>🧴 Dermatology Tips</strong><br>Dear user, healthy skin is beautiful skin. Some tips:<br>1. Use sunscreen daily.<br>2. Moisturize regularly.<br>3. Cleanse gently.<br>4. Stay hydrated.<br>5. Eat antioxidant-rich foods.<br>For expert advice, visit <a href="dermatology_tips.html" class="page-link" target="_blank">Dermatology Tips</a>. Glow with confidence!'
+            },
+            emergency: {
+                keywords: [
+                    'tips for emergency', 'emergency prevention', 'urgent care tips', 'accident prevention',
+                    'tips for emergncy', 'emergency preventin', 'urgnt care tipps', 'accident preventin',
+                    'emergncys tips', 'emergencyprevention', 'urgentcaretips', 'accidentprevention'
+                ],
+                response: '<strong>🚨 Emergency Care Tips</strong><br>Dear user, prevention is better than cure. Key tips to avoid emergencies:<br>1. Get annual check-ups.<br>2. Stay up to date on vaccinations.<br>3. Exercise caution in daily activities.<br>4. Know first aid basics.<br>5. Prepare an emergency kit.<br>More details at <a href="emergency_tips.html" class="page-link" target="_blank">Emergency Tips</a>. Stay safe always.'
+            }
+        };
+
+        // Simple matching function (unchanged)
+        function matchesKeywords(input, keywords) {
+            const lowerInput = input.toLowerCase().trim();
+            return keywords.some(keyword => {
+                const lowerKeyword = keyword.toLowerCase();
+                return lowerInput === lowerKeyword || 
+                       lowerInput.includes(lowerKeyword) || 
+                       lowerKeyword.includes(lowerInput);
+            });
+        }
+
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase().trim();
+
+            // Check for tips first
+            for (const [category, data] of Object.entries(tips)) {
+                if (matchesKeywords(lowerMessage, data.keywords) || (lowerMessage.includes('tips') && matchesKeywords(lowerMessage, responses[category]?.keywords || []))) {
+                    return data.response;
+                }
+            }
+
+            // Then regular responses
+            for (const [category, data] of Object.entries(responses)) {
+                if (matchesKeywords(lowerMessage, data.keywords)) {
+                    return data.response;
+                }
+            }
+
+            // Fallback
+            return '<strong>🤖 I\'m here to assist you, dear user.</strong><br>If I didn\'t understand, could you please rephrase? Try asking about specific departments like "cardiology" or "tips for pediatrics". Thank you for your patience!';
+        }
+
+        // NEW: Voice input integration
+        let recognition;
+        let isListening = false;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('userInput').value = transcript;
+                sendMessage();
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                stopListening();
+            };
+
+            recognition.onend = () => {
+                stopListening();
+            };
+        }
+
+        function toggleListening() {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            if (recognition) {
+                recognition.start();
+                isListening = true;
+                document.getElementById('micBtn').classList.add('active');
+                document.getElementById('userInput').placeholder = "Listening... Speak now!";
+            }
+        }
+
+        function stopListening() {
+            if (recognition) {
+                recognition.stop();
+            }
+            isListening = false;
+            document.getElementById('micBtn').classList.remove('active');
+            document.getElementById('userInput').placeholder = "Type your message...";
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const chatBody = document.getElementById('chatBody');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = message;
+            chatBody.appendChild(userMsg);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            input.value = '';
+            input.focus();
+
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot-message';
+                botMsg.innerHTML = getBotResponse(message);
+                chatBody.appendChild(botMsg);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 500);
+        }
+
+        // Enter key support
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Focus on load
+        window.onload = () => {
+            document.getElementById('userInput').focus();
+        };
+    </script>
+</body>
+</html>

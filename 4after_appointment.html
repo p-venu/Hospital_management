@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBKR Hospital - Appointment Confirmed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --accent-teal: #06b6d4;
+            --accent-purple: #a855f7;
+            --accent-orange: #f97316;
+            --light-bg: #e0f2fe;
+            --card-bg: #ffffff;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .btn {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: linear-gradient(135deg, var(--card-bg), var(--light-bg));
+        }
+
+        .success-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[var(--light-bg)] to-white font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="bg-[var(--primary-blue)] text-white p-5 sticky top-0 z-50 shadow-xl" role="navigation" aria-label="Main navigation">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold tracking-tight">NBKR Hospital</h1>
+            <ul class="flex space-x-10 text-lg font-medium">
+                <li><a href="1index.html" class="hover:text-[var(--accent-teal)] transition-colors duration-300">Home</a></li>
+                <li><a href="2about_hospital_doctors.html" class="hover:text-[var(--accent-teal)] transition-colors duration-300">About</a></li>
+                <li><a href="3our_services.html" class="hover:text-[var(--accent-teal)] transition-colors duration-300">Services</a></li>
+                <li><a href="4appointments.html" class="hover:text-[var(--accent-teal)] transition-colors duration-300" aria-current="page">Appointment</a></li>
+                <li><a href="5contact_us.html" class="hover:text-[var(--accent-teal)] transition-colors duration-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Success Section -->
+    <section class="py-24 bg-[var(--light-bg)]">
+        <div class="container mx-auto px-6 text-center">
+            <div class="success-card max-w-2xl mx-auto p-8 rounded-xl shadow-lg animate-fade-in">
+                <svg class="w-16 h-16 text-[var(--accent-teal)] mx-auto mb-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <h2 class="text-3xl font-bold text-[var(--primary-blue)] mb-4 animate-fade-in">Appointment Confirmed!</h2>
+                <p class="text-lg text-gray-600 mb-6 animate-fade-in" style="animation-delay: 0.2s;">
+                    Your appointment has been successfully booked. We're looking forward to assisting you.
+                </p>
+                <div class="bg-white p-6 rounded-lg shadow-inner mb-6 animate-fade-in" style="animation-delay: 0.3s;">
+                    <h3 class="text-xl font-semibold text-[var(--secondary-blue)] mb-4">Appointment Details</h3>
+                    <p class="text-gray-600">Patient Name: <span id="confirmName" class="font-medium"></span></p>
+                    <p class="text-gray-600">Department: <span id="confirmDepartment" class="font-medium"></span></p>
+                    <p class="text-gray-600">Doctor: <span id="confirmDoctor" class="font-medium"></span></p>
+                    <p class="text-gray-600">Date: <span id="confirmDate" class="font-medium"></span></p>
+                    <p class="text-gray-600">Time: <span id="confirmTime" class="font-medium"></span></p>
+                    <p class="text-gray-600">Email: <span id="confirmEmail" class="font-medium"></span></p>
+                    <p class="text-sm text-gray-500 mt-2">A confirmation has been sent to your email.</p>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <a href="1index.html" class="btn px-8 py-3 bg-[var(--secondary-blue)] text-white rounded-full font-medium hover:bg-[var(--accent-teal)]" role="button" aria-label="Return to Home">Back to Home</a>
+                    <a href="5contact_us.html" class="btn px-8 py-3 bg-[var(--light-bg)] text-[var(--primary-blue)] rounded-full font-medium hover:bg-[var(--accent-orange)] hover:text-white" role="button" aria-label="Contact Support">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Load appointment data from sessionStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const appointmentData = JSON.parse(sessionStorage.getItem('appointmentData'));
+            if (appointmentData) {
+                document.getElementById('confirmName').textContent = appointmentData.name || 'Not provided';
+                document.getElementById('confirmDepartment').textContent = appointmentData.department || 'Not provided';
+                document.getElementById('confirmDoctor').textContent = appointmentData.doctor || 'Not specified';
+                
+                // Correct date issue (adding 1 day if previously decremented)
+                let date = new Date(appointmentData.date);
+                date.setDate(date.getDate() + 1); // Adjust for the one-day-less issue
+                document.getElementById('confirmDate').textContent = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                // Set time based on Preferred Time of Day
+                let time = 'Not provided';
+                if (appointmentData.timePreference === 'morning') {
+                    time = '07:00'; // 5-9 AM range, defaulting to 7 AM
+                } else if (appointmentData.timePreference === 'afternoon') {
+                    time = '13:00'; // 1 PM as default for afternoon
+                }
+                document.getElementById('confirmTime').textContent = time;
+
+                document.getElementById('confirmEmail').textContent = appointmentData.email || 'Not provided';
+                // Clear sessionStorage after displaying data
+                sessionStorage.removeItem('appointmentData');
+            } else {
+                // Fallback in case data is not available
+                document.getElementById('confirmName').textContent = 'Not provided';
+                document.getElementById('confirmDepartment').textContent = 'Not provided';
+                document.getElementById('confirmDoctor').textContent = 'Not specified';
+                document.getElementById('confirmDate').textContent = 'Not provided';
+                document.getElementById('confirmTime').textContent = 'Not provided';
+                document.getElementById('confirmEmail').textContent = 'Not provided';
+            }
+        });
+    </script>

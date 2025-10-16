@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Appointments | Dr. John Smith | NBKR Hospital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fbfcfd;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .dna-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .dna-bg::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.publicdomainpictures.net/pictures/300000/velka/dna-helix-1544039042r8S.jpg') repeat;
+            background-size: 30%;
+            opacity: 0.2;
+            animation: dnaMove 15s linear infinite;
+        }
+
+        @keyframes dnaMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 200% 200%; }
+        }
+
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #5b9ef6;
+            --highlight-gold: #d4a017;
+            --tech-glow: #00ffff;
+            --border-green: #22c55e;
+            --border-blue: #3b82f6;
+            --dark-green: #15803d;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px var(--tech-glow); }
+            50% { box-shadow: 0 0 20px var(--tech-glow); }
+            100% { box-shadow: 0 0 5px var(--tech-glow); }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .patient-card {
+            border: 4px solid var(--highlight-gold);
+            border-radius: 20px;
+            background: linear-gradient(145deg, #a8c5e7, #d2e0e3);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .patient-card:hover {
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+            animation: glow 1.5s infinite;
+        }
+
+        .patient-card .time-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .patient-card p {
+            font-weight: bold;
+        }
+
+        .update-btn {
+            background-color: var(--border-green);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-btn:hover {
+            background-color: var(--dark-green);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-card {
+            border: 4px solid var(--border-blue);
+            border-radius: 20px;
+            background: linear-gradient(145deg, #ffffff, #87b4eb);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-areas:
+                "contact departments"
+                "connect .";
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .footer-contact { grid-area: contact; }
+        .footer-departments { grid-area: departments; }
+        .footer-connect { grid-area: connect; }
+
+        .footer-section {
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--highlight-gold);
+        }
+
+        .footer-section p, .footer-section ul li {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: white;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--highlight-gold);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-areas:
+                    "contact"
+                    "departments"
+                    "connect";
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dna-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-[var(--primary-blue)] text-white p-6 sticky top-0 z-50 shadow-2xl">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-4xl font-extrabold tracking-wide drop-shadow-md">NBKR Hospital</h1>
+            <ul class="flex space-x-12 text-xl font-semibold">
+                <li><a href="1index.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Home</a></li>
+                <li><a href="2about_hospital_doctors.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">About</a></li>
+                <li><a href="3our_services.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Services</a></li>
+                <li><a href="4appointments.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Appointment</a></li>
+                <li><a href="5contact_us.html" class="hover:text-[var(--secondary-blue)] transition-colors duration-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Appointments Section -->
+    <section class="py-16 bg-transparent">
+        <div class="container mx-auto px-6">
+            <h3 class="text-4xl font-bold mb-8 text-[var(--secondary-blue)] text-center tracking-tight animate-fade-in">Today's Appointments for Dr. John Smith</h3>
+            
+            <!-- Statistics -->
+            <div class="stats-card animate-fade-in" style="animation-delay: 0.2s;">
+                <p>Total Patients Today: <span id="total-patients">0</span></p>
+                <p>Updated Patients: <span id="updated-patients">0</span></p>
+                <p>Remaining Patients: <span id="remaining-patients">0</span></p>
+                <p>Updated Patients %: <span id="updated-percent">0</span>%</p>
+            </div>
+
+            <!-- Patient List -->
+            <div id="patient-list" class="grid grid-cols-1 gap-6"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[var(--primary-blue)] text-white py-12">
+        <div class="footer-grid">
+            <div class="footer-section footer-contact">
+                <h4>Contact Us</h4>
+                <p>Phone: +1 (555) 123-4567</p>
+                <p>Email: contact@nbkrhospital.com</p>
+                <p>Address: 123 Health St, San Francisco, CA, USA</p>
+            </div>
+            <div class="footer-section footer-departments">
+                <h4>Explore Departments</h4>
+                <ul>
+                    <li><a href="neurology.html">Neurology</a></li>
+                    <li><a href="orthopedics.html">Orthopedics</a></li>
+                    <li><a href="pediatrics.html">Pediatrics</a></li>
+                    <li><a href="oncology.html">Oncology</a></li>
+                    <li><a href="gynecology.html">Gynecology</a></li>
+                    <li><a href="gastroenterology.html">Gastroenterology</a></li>
+                    <li><a href="dermatology.html">Dermatology</a></li>
+                </ul>
+            </div>
+            <div class="footer-section footer-connect">
+                <h4>Connect With Us</h4>
+                <p><a href="https://nbkrhospital.com/app">Download Our App</a></p>
+                <div class="social-icons">
+                    <a href="https://facebook.com/nbkrhospital" title="Facebook"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+                    <a href="https://twitter.com/nbkrhospital" title="Twitter"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.3 4.3 0 001.88-2.38 8.6 8.6 0 01-2.72 1.05 4.28 4.28 0 00-7.29 3.9 12.14 12.14 0 01-8.82-4.47 4.28 4.28 0 001.33 5.71 4.27 4.27 0 01-1.94-.54v.05a4.28 4.28 0 003.44 4.2 4.28 4.28 0 01-1.93.07 4.28 4.28 0 004 2.98 8.58 8.58 0 01-5.33 1.84c-.34 0-.68-.02-1.02-.06A12.14 12.14 0 006.58 21c7.96 0 12.32-6.6 12.32-12.32 0-.19 0-.37-.01-.56A8.78 8.78 0 0022.46 6z"/></svg></a>
+                    <a href="https://instagram.com/nbkrhospital" title="Instagram"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.326 3.608 1.301.975.975 1.24 2.242 1.301 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.326 2.633-1.301 3.608-.975.975-2.242 1.24-3.608 1.301-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.326-3.608-1.301-.975-.975-1.24-2.242-1.301-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.326-2.633 1.301-3.608.975-.975 2.242-1.24 3.608-1.301 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.542.07-2.892.427-3.993 1.528-1.101 1.101-1.458 2.451-1.528 3.993-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.07 1.542.427 2.892 1.528 3.993 1.101 1.101 2.451 1.458 3.993 1.528 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.542-.07 2.892-.427 3.993-1.528 1.101-1.101 1.458-2.451 1.528-3.993.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.07-1.542-.427-2.892-1.528-3.993-1.101-1.101-2.451-1.458-3.993-1.528-1.28-.058-1.688-.072-4.947-.072z"/><path d="M12 6.865a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zm0 8.468a3.333 3.333 0 110-6.666 3.333 3.333 0 010 6.666zm5.339-9.87a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z"/></svg></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 NBKR Hospital. All rights reserved. | Pioneering High-Tech Healthcare</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample patient data for today's appointments (30 patients)
+        const patients = [
+            { id: "HSP1001", name: "Priya Reddy", time: "08:00 AM", purpose: "Follow-up for Angioplasty", updated: false },
+            { id: "HSP1002", name: "Arjun Kumar", time: "08:30 AM", purpose: "Heart Failure Consultation", updated: false },
+            { id: "HSP1003", name: "Sneha Patel", time: "09:00 AM", purpose: "Stress Test Review", updated: false },
+            { id: "HSP1004", name: "Vikram Singh", time: "09:30 AM", purpose: "Pacemaker Check", updated: false },
+            { id: "HSP1005", name: "Anita Sharma", time: "10:00 AM", purpose: "Cardiac MRI Review", updated: false },
+            { id: "HSP1006", name: "Rahul Verma", time: "10:30 AM", purpose: "Angiography Follow-up", updated: false },
+            { id: "HSP1007", name: "Meena Gupta", time: "11:00 AM", purpose: "Heart Rhythm Monitoring", updated: false },
+            { id: "HSP1008", name: "Suresh Nair", time: "11:30 AM", purpose: "Hypertension Check", updated: false },
+            { id: "HSP1009", name: "Lakshmi Rao", time: "12:00 PM", purpose: "Post-Surgery Consultation", updated: false },
+            { id: "HSP1010", name: "Kiran Desai", time: "12:30 PM", purpose: "Echocardiogram Review", updated: false },
+            { id: "HSP1011", name: "Ravi Menon", time: "01:00 PM", purpose: "Heart Failure Management", updated: false },
+            { id: "HSP1012", name: "Pooja Iyer", time: "01:30 PM", purpose: "Cardiac Rehab Planning", updated: false },
+            { id: "HSP1013", name: "Amit Joshi", time: "02:00 PM", purpose: "Stress Test Follow-up", updated: false },
+            { id: "HSP1014", name: "Neha Kapoor", time: "02:30 PM", purpose: "Pacemaker Adjustment", updated: false },
+            { id: "HSP1015", name: "Vijay Malhotra", time: "03:00 PM", purpose: "Angioplasty Check", updated: false },
+            { id: "HSP1016", name: "Sunita Pillai", time: "03:30 PM", purpose: "Heart Rate Monitoring", updated: false },
+            { id: "HSP1017", name: "Rohan Bose", time: "04:00 PM", purpose: "Cardiac CT Review", updated: false },
+            { id: "HSP1018", name: "Divya Thakur", time: "04:30 PM", purpose: "Post-Bypass Follow-up", updated: false },
+            { id: "HSP1019", name: "Manoj Kulkarni", time: "05:00 PM", purpose: "Hypertension Management", updated: false },
+            { id: "HSP1020", name: "Shalini Dubey", time: "05:30 PM", purpose: "Echocardiogram Follow-up", updated: false },
+            { id: "HSP1021", name: "Aditya Roy", time: "06:00 PM", purpose: "Heart Failure Review", updated: false },
+            { id: "HSP1022", name: "Kavita Mehra", time: "06:30 PM", purpose: "Pacemaker Monitoring", updated: false },
+            { id: "HSP1023", name: "Sanjay Yadav", time: "07:00 PM", purpose: "Angiography Planning", updated: false },
+            { id: "HSP1024", name: "Rekha Shah", time: "07:30 PM", purpose: "Stress Test Consultation", updated: false },
+            { id: "HSP1025", name: "Nikhil Arora", time: "08:00 PM", purpose: "Cardiac MRI Follow-up", updated: false },
+            { id: "HSP1026", name: "Anjali Sood", time: "08:30 PM", purpose: "Heart Rhythm Check", updated: false },
+            { id: "HSP1027", name: "Prakash Jain", time: "09:00 PM", purpose: "Post-Surgery Review", updated: false },
+            { id: "HSP1028", name: "Geeta Vyas", time: "09:30 PM", purpose: "Hypertension Follow-up", updated: false },
+            { id: "HSP1029", name: "Ramesh Patil", time: "10:00 PM", purpose: "Cardiac Rehab Check", updated: false },
+            { id: "HSP1030", name: "Tara Menon", time: "10:30 PM", purpose: "Pacemaker Review", updated: false }
+        ];
+
+        // Load patients from localStorage or use default
+        function loadPatients() {
+            const storedPatients = JSON.parse(localStorage.getItem('patients') || '[]');
+            if (storedPatients.length === 0) {
+                localStorage.setItem('patients', JSON.stringify(patients));
+                return patients;
+            }
+            return storedPatients;
+        }
+
+        // Update statistics and patient list
+        function updateUI() {
+            const patientList = loadPatients();
+            const totalPatients = patientList.length;
+            const updatedPatients = patientList.filter(p => p.updated).length;
+            const remainingPatients = totalPatients - updatedPatients;
+            const updatedPercent = totalPatients > 0 ? ((updatedPatients / totalPatients) * 100).toFixed(2) : 0;
+
+            document.getElementById('total-patients').textContent = totalPatients;
+            document.getElementById('updated-patients').textContent = updatedPatients;
+            document.getElementById('remaining-patients').textContent = remainingPatients;
+            document.getElementById('updated-percent').textContent = updatedPercent;
+
+            const patientListDiv = document.getElementById('patient-list');
+            patientListDiv.innerHTML = '';
+            patientList.forEach(patient => {
+                const patientCard = document.createElement('div');
+                patientCard.className = 'patient-card animate-fade-in';
+                patientCard.style.animationDelay = `${0.4 + patientList.indexOf(patient) * 0.2}s`;
+                patientCard.innerHTML = `
+                    <p class="text-gray-700 text-lg font-bold">Patient: ${patient.name}</p>
+                    <div class="time-row">
+                        <p class="text-gray-700 text-lg font-bold">Time: ${patient.time}</p>
+                        <a href="app_head_cardiology_john_smith_next.html?patientId=${patient.id}" class="update-btn">Update</a>
+                    </div>
+                    <p class="text-gray-700 text-lg font-bold">Purpose: ${patient.purpose}</p>
+                `;
+                patientListDiv.appendChild(patientCard);
+            });
+        }
+
+        // Initialize UI on page load
+        window.onload = updateUI;
+    </script>
+</body>
+</html>
